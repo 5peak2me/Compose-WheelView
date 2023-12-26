@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 rootProject.name = "Compose-WheelView"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
@@ -19,5 +21,6 @@ dependencyResolutionManagement {
 }
 
 include(":composeApp")
+include(":iosApp")
+
 include(":wheelview")
-//include(":wheelpicker")
