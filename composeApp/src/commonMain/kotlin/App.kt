@@ -18,6 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.l3gacy.lib.compose.wheelview.SelectorOptions
+import com.l3gacy.lib.compose.wheelview.WheelPicker
 import com.l3gacy.lib.compose.wheelview.WheelView
 import com.l3gacy.lib.compose.wheelview.WheelViewProperties
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -51,6 +52,26 @@ fun App() {
                     },
                     properties = WheelViewProperties(offset = 2),
                     itemContent = {
+                        Text(
+                            text = list[it],
+                            textAlign = TextAlign.Start,
+                            fontSize = 17.sp,
+                            color = Color.Black
+                        )
+                    },
+                )
+            }
+            Box(modifier = Modifier.weight(1f)) {
+                WheelPicker(
+                    modifier = Modifier,
+//                    size = DpSize(150.dp, 25.dp),
+                    count = list.size,
+                    rowCount = 5,
+                    onScrollFinished = {
+                        println("selection: $it")
+                        it
+                    },
+                    content = {
                         Text(
                             text = list[it],
                             textAlign = TextAlign.Start,
