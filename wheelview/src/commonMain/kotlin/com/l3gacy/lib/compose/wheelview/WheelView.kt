@@ -82,6 +82,7 @@ fun WheelView(
     val haptic = LocalHapticFeedback.current
 
     val count = if (properties.endless) itemCount else itemCount + 2 * rowOffset
+    // max offset is 4, min offset is 1
     val rowOffsetCount = maxOf(1, minOf(rowOffset, 4))
     // visible item count for WheelView
     val visibleCount = (rowOffsetCount * 2) + 1
@@ -147,7 +148,7 @@ fun WheelView(
                         .height(itemSize.height)
                         .fillMaxWidth()
                         .graphicsLayer {
-//                            this.rotationX = rotateDegree
+                            this.rotationX = rotateDegree
                         },
                     contentAlignment = Alignment.Center,
                 ) {
