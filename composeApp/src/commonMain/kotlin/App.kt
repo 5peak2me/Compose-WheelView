@@ -15,10 +15,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.l3gacy.lib.compose.wheelview.SelectorOptions
 import com.l3gacy.lib.compose.wheelview.WheelView
+import com.l3gacy.lib.compose.wheelview.WheelViewProperties
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
@@ -27,7 +28,7 @@ import org.jetbrains.compose.resources.painterResource
 fun App() {
 
     val list = mutableListOf<String>()
-    for (value in 1..10) {
+    for (value in 1..12) {
         list.add("$value")
     }
 
@@ -38,13 +39,17 @@ fun App() {
             Box(modifier = Modifier.weight(1f)) {
                 WheelView(
                     modifier = Modifier,
-                    itemSize = DpSize(150.dp, 25.dp),
+//                    itemSize = DpSize(150.dp, 25.dp),
                     selection = 5,
                     itemCount = list.size,
-                    rowOffset = 4,
+                    selectorOption = SelectorOptions().copy(
+                        color = Color.Magenta, alpha = 1f, width = 2.dp
+                    ),
+                    rowOffset = 3,
                     onSelectionChanged = {
-                        println(it)
+                        println("selection: $it")
                     },
+                    properties = WheelViewProperties(offset = 2),
                     itemContent = {
                         Text(
                             text = list[it],

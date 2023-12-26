@@ -1,9 +1,8 @@
 package com.l3gacy.lib.compose.wheelview
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -12,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
@@ -21,7 +21,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -39,6 +39,7 @@ import kotlinx.coroutines.launch
  */
 @Immutable
 class WheelViewProperties(
+    val offset: Int = 2,
     val haptic: Boolean = true,
     val scrollable: Boolean = true,
     val endless: Boolean = true,
@@ -47,15 +48,16 @@ class WheelViewProperties(
         if (this === other) return true
         if (other !is WheelViewProperties) return false
 
+        if (offset != other.offset) return false
         if (haptic != other.haptic) return false
         if (scrollable != other.scrollable) return false
-        if (endless != other.endless) return false
 
-        return true
+        return endless == other.endless
     }
 
     override fun hashCode(): Int {
-        var result = haptic.hashCode()
+        var result = offset.hashCode()
+        result = 31 * result + haptic.hashCode()
         result = 31 * result + endless.hashCode()
         result = 31 * result + scrollable.hashCode()
         return result
@@ -65,7 +67,7 @@ class WheelViewProperties(
 @Composable
 fun WheelView(
     modifier: Modifier = Modifier,
-    itemSize: DpSize = DpSize(256.dp, 256.dp),
+    itemSize: DpSize = DpSize(256.dp, 40.dp),
     selection: Int = 0,
     itemCount: Int,
     rowOffset: Int = 2,
@@ -95,7 +97,6 @@ fun WheelView(
         derivedStateOf { state.firstVisibleItemIndex + rowOffsetCount }
     }
 
-    // todo: fix this
     LaunchedEffect(key1 = itemCount) {
         coroutineScope.launch {
             state.scrollToItem(startIndex)
@@ -110,6 +111,7 @@ fun WheelView(
                 } else {
                     (it + rowOffsetCount) % count - rowOffset
                 }
+                println("index: $index")
                 onSelectionChanged(index)
                 if (state.firstVisibleItemScrollOffset != 0) {
                     coroutineScope.launch {
@@ -129,9 +131,8 @@ fun WheelView(
     Box(modifier = modifier.height(size.height).fillMaxWidth()) {
         if (selectorOption.enabled) {
             SelectionView(
-                modifier.padding(horizontal = 16.dp).fillMaxWidth().height(size.height),
-                selectorOptions = selectorOption,
-                rowOffset,
+                modifier.align(Alignment.Center).padding(horizontal = 16.dp).fillMaxWidth()
+                    .height(itemSize.height),
             )
         }
         LazyColumn(
@@ -143,10 +144,10 @@ fun WheelView(
                 val rotateDegree = calculateRotationByIndex(selectedIndex.value, it, rowOffset)
                 Box(
                     modifier = Modifier
-                        .height(size.height / visibleCount)
+                        .height(itemSize.height)
                         .fillMaxWidth()
                         .graphicsLayer {
-                            this.rotationX = rotateDegree
+//                            this.rotationX = rotateDegree
                         },
                     contentAlignment = Alignment.Center,
                 ) {
@@ -165,49 +166,11 @@ fun WheelView(
 @Composable
 private fun SelectionView(
     modifier: Modifier = Modifier,
-    selectorOptions: SelectorOptions,
-    rowOffset: Int,
 ) {
-//    Spacer(modifier.background(color = Color.Red).fillMaxSize())
-    Column(
-        modifier = modifier.fillMaxSize()
-    ) {
-
-        Box(
-            modifier = Modifier
-                .weight(rowOffset.toFloat())
-                .fillMaxWidth(),
-        )
-
-        Column(
-            modifier = Modifier
-                .weight(1.13f)
-                .fillMaxWidth(),
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
-            Box(
-                modifier = Modifier
-                    .height(selectorOptions.width)
-                    .alpha(selectorOptions.alpha)
-                    .background(selectorOptions.color)
-                    .fillMaxWidth()
-            )
-            Box(
-                modifier = Modifier
-                    .height(selectorOptions.width)
-                    .alpha(selectorOptions.alpha)
-                    .background(selectorOptions.color)
-                    .fillMaxWidth()
-            )
-
-        }
-
-        Box(
-            modifier = Modifier
-                .weight(rowOffset.toFloat())
-                .fillMaxWidth(),
-        )
-    }
+    Spacer(
+        modifier.background(color = Color(0xFFF1F1F1), shape = MaterialTheme.shapes.medium)
+            .fillMaxSize()
+    )
 }
 
 private fun calculateSelectedIndex(listState: LazyListState, height: Dp): Int {
@@ -215,6 +178,7 @@ private fun calculateSelectedIndex(listState: LazyListState, height: Dp): Int {
     var index = currentItem?.index ?: 0
 
     if (currentItem?.offset != 0) {
+        println(currentItem?.offset)
         if (currentItem != null && currentItem.offset <= -height.value * 3 / 10) {
             index++
         }
