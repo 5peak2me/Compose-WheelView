@@ -24,12 +24,17 @@ kotlin {
     androidTarget {
         compilations.all {
             kotlinOptions {
-                jvmTarget = "1.8"
+                jvmTarget = "17"
             }
         }
     }
     
     jvm("desktop")
+
+    js {
+        browser()
+        binaries.executable()
+    }
     
     listOf(
         iosX64(),
@@ -54,13 +59,21 @@ kotlin {
             implementation(compose.foundation)
             implementation(compose.material)
             implementation(compose.ui)
-            @OptIn(ExperimentalComposeLibrary::class)
             implementation(compose.components.resources)
             implementation(libs.kotlinx.datetime)
             implementation(project(":wheelview"))
         }
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+        }
         desktopMain.dependencies {
+            implementation(compose.desktop.common)
             implementation(compose.desktop.currentOs)
+        }
+        jsMain.dependencies {
+            implementation(compose.html.core)
+        }
+        iosMain.dependencies {
         }
     }
 }
@@ -91,8 +104,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     dependencies {
         debugImplementation(libs.compose.ui.tooling)
