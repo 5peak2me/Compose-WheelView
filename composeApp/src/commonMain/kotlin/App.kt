@@ -21,6 +21,7 @@ import com.l3gacy.lib.compose.wheelview.SelectorOptions
 import com.l3gacy.lib.compose.wheelview.WheelPicker
 import com.l3gacy.lib.compose.wheelview.WheelView
 import com.l3gacy.lib.compose.wheelview.WheelViewProperties
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
@@ -86,7 +87,7 @@ fun App() {
             }
             AnimatedVisibility(showContent) {
                 Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                    Image(painterResource("compose-multiplatform.xml"), null)
+                    Image(painterResource(DrawableResource("compose-multiplatform.xml")), null)
                     Text("Compose: $greeting")
                 }
             }
