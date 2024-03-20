@@ -6,10 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.l3gacy.lib.compose.wheelview.WheelView
-import kotlinx.datetime.Clock
+import com.l3gacy.lib.compose.wheelview.picker.internal.now
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 
 /**
  *
@@ -21,7 +19,7 @@ import kotlinx.datetime.toLocalDateTime
 @Composable
 fun WheelDatePicker(
     modifier: Modifier = Modifier,
-    initialDate: LocalDate = Clock.System.now().toLocalDateTime(TimeZone.UTC).date,
+    initialDate: LocalDate = LocalDate.now(),
     minDate: LocalDate,
     maxDate: LocalDate,
     dateFormat: DateFormat = DateFormat.DAY_MONTH_YEAR,
