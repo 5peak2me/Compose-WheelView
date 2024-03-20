@@ -1,3 +1,4 @@
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,9 +12,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.l3gacy.lib.compose.wheelview.WheelPicker
+import com.l3gacy.lib.compose.wheelview.picker.WheelDatePicker
+import com.l3gacy.lib.compose.wheelview.picker.WheelTimePicker
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 
 @OptIn(ExperimentalResourceApi::class)
@@ -52,12 +56,12 @@ fun App() {
 //            }
             Box(modifier = Modifier.weight(1f)) {
                 WheelPicker(
-                    modifier = Modifier,
+                    modifier = Modifier.background(Color.LightGray).fillMaxWidth(0.7F),
 //                    size = DpSize(150.dp, 25.dp),
                     count = list.size,
                     rowCount = 7,
                     onScrollFinished = {
-                        println("selection: $it")
+//                        println("selection: $it")
                         it
                     },
                     content = {
@@ -70,6 +74,25 @@ fun App() {
                     },
                 )
             }
+
+            Box(modifier = Modifier.weight(1f)) {
+                WheelTimePicker(
+                    modifier = Modifier.background(Color.LightGray).fillMaxWidth(0.7F),
+                    onSelectedTime = { time ->
+                        println("hour: ${time.hour}, minute: ${time.minute}")
+                    }
+                )
+            }
+
+            Box(modifier = Modifier.weight(1f)) {
+                WheelDatePicker(
+                    modifier = Modifier.background(Color.LightGray).fillMaxWidth(),
+                    onSelectedDate = { date ->
+                        println("year: ${date.year}, month: ${date.month}, day: ${date.dayOfMonth}")
+                    }
+                )
+            }
+
 //            Button(onClick = { showContent = !showContent }) {
 //                Text("Click me!")
 //            }

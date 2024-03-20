@@ -6,8 +6,8 @@ import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListState
@@ -31,7 +31,6 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import kotlin.math.abs
 
@@ -42,12 +41,12 @@ fun WheelPicker(
     startIndex: Int = 0,
     count: Int,
     rowCount: Int,
-    size: DpSize = DpSize(256.dp, 256.dp),
     endless: Boolean = true,
     selectorProperties: SelectorProperties = WheelPickerDefaults.selectorProperties(),
     onScrollFinished: (snappedIndex: Int) -> Int? = { null },
     content: @Composable LazyItemScope.(index: Int) -> Unit,
 ) {
+    val height = remember { 210.dp } // 3 * 5 * 7
     val lazyListState = rememberLazyListState(startIndex)
     val flingBehavior = rememberSnapFlingBehavior(lazyListState)
     val isScrollInProgress = lazyListState.isScrollInProgress
@@ -70,8 +69,8 @@ fun WheelPicker(
 
     Box(
         modifier = modifier
-            .height(size.height)
-            .width(size.width),
+            .height(height)
+            .fillMaxWidth(),
         contentAlignment = Alignment.Center
     ) {
 //        if (selectorProperties.enabled().value) {
@@ -86,7 +85,7 @@ fun WheelPicker(
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = lazyListState,
-            contentPadding = PaddingValues(vertical = size.height / rowCount * ((rowCount - 1) / 2)),
+            contentPadding = PaddingValues(vertical = height / rowCount * ((rowCount - 1) / 2)),
             flingBehavior = flingBehavior
         ) {
             items(count) { index ->
@@ -98,8 +97,8 @@ fun WheelPicker(
 
                 Box(
                     modifier = Modifier
-                        .height(size.height / rowCount)
-                        .width(size.width)
+                        .height(height / rowCount)
+                        .fillMaxWidth()
                         .alpha(newAlpha)
                         .graphicsLayer {
                             rotationX = newRotationX

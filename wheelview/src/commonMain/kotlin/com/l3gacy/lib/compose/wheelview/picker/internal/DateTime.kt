@@ -9,6 +9,9 @@ import kotlinx.datetime.toLocalDateTime
 import kotlin.math.min
 import kotlin.time.DurationUnit
 
+internal val String.capitalize: String
+    get() = replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+
 // <editor-fold desc="LocalDate" defaultstate="collapsed">
 /**
  * Obtains the current date from the system clock in the default time-zone.
