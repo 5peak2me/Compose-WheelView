@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.sp
 import com.l3gacy.lib.compose.wheelview.WheelPicker
 import com.l3gacy.lib.compose.wheelview.picker.WheelDatePicker
 import com.l3gacy.lib.compose.wheelview.picker.WheelTimePicker
+import kotlinx.datetime.number
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 
 @OptIn(ExperimentalResourceApi::class)
@@ -88,7 +89,7 @@ fun App() {
                 WheelDatePicker(
                     modifier = Modifier.background(Color.LightGray).fillMaxWidth(),
                     onSelectedDate = { date ->
-                        println("year: ${date.year}, month: ${date.month}, day: ${date.dayOfMonth}")
+                        println("year: ${date.year}, month: ${date.month.number}, day: ${date.dayOfMonth}")
                     }
                 )
             }
