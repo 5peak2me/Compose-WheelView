@@ -28,6 +28,9 @@ internal fun LocalDate.Companion.now(timeZone: TimeZone = TimeZone.currentSystem
     return Clock.System.now().toLocalDateTime(timeZone).date
 }
 
+internal val LocalDate.isLeapYear: Boolean
+    get() = isLeapYear(year)
+
 /**
  * The epoch year {@code LocalDate}, '1970-01-01'.
  */

@@ -54,7 +54,7 @@ fun WheelPicker(
     LaunchedEffect(isScrollInProgress, count) {
         if (!isScrollInProgress) {
             onScrollFinished(calculateSnappedItemIndex(lazyListState))?.let {
-                lazyListState.animateScrollToItem(it)
+                lazyListState.scrollToItem(it)
             }
         }
     }
@@ -110,7 +110,7 @@ fun WheelPicker(
             }
         }
 
-        SelectorView(offset = rowCount / 2)
+//        SelectorView(offset = rowCount / 2)
     }
 }
 

@@ -9,17 +9,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.l3gacy.lib.compose.wheelview.WheelView
 import com.l3gacy.lib.compose.wheelview.picker.internal.EPOCH
 import com.l3gacy.lib.compose.wheelview.picker.internal.MAX
 import com.l3gacy.lib.compose.wheelview.picker.internal.capitalize
 import com.l3gacy.lib.compose.wheelview.picker.internal.isAfter
 import com.l3gacy.lib.compose.wheelview.picker.internal.isBefore
+import com.l3gacy.lib.compose.wheelview.picker.internal.isLeapYear
 import com.l3gacy.lib.compose.wheelview.picker.internal.now
+import com.l3gacy.lib.compose.wheelview.picker.internal.withDayOfMonth
 import com.l3gacy.lib.compose.wheelview.picker.internal.withMonth
 import com.l3gacy.lib.compose.wheelview.picker.internal.withYear
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
+import kotlinx.datetime.number
 
 /**
  *
@@ -35,9 +37,12 @@ fun WheelDatePicker(
     minDate: LocalDate = LocalDate.EPOCH,
     maxDate: LocalDate = LocalDate.MAX,
     dateFormat: DateFormat = DateFormat.DAY_MONTH_YEAR,
+    endless: Boolean = false,
     onSelectedDate: (LocalDate) -> Unit,
 ) {
     var snappedDate by remember { mutableStateOf(initialDate) }
+
+    var dayOfMonths = calculateDayOfMonths(snappedDate.month.number, snappedDate.year)
 
     val months = (1..12).map {
         val monthName = Month(it).name.lowercase().capitalize
@@ -59,16 +64,40 @@ fun WheelDatePicker(
 
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
         Row {
-            WheelView(modifier = Modifier.weight(1F), itemCount = 12, onSelectionChanged = {}) {
+            // Day
+            WheelTextPicker(
+                modifier = Modifier.weight(1F),
+                endless = endless,
+                texts = dayOfMonths.map { it.text },
+                startIndex = dayOfMonths.find { it.value == initialDate.dayOfMonth }?.index ?: 0,
+                onScrollFinished = { snappedIndex  ->
+                    val newDayOfMonth = dayOfMonths.find { it.index == snappedIndex }?.value
+                    newDayOfMonth?.let {
+                        val newDate = snappedDate.withDayOfMonth(newDayOfMonth)
 
-            }
+                        if (!newDate.isBefore(minDate) && !newDate.isAfter(maxDate)) {
+                            snappedDate = newDate
+                        }
+
+                        val newIndex = dayOfMonths.find { it.value == snappedDate.dayOfMonth }?.index
+
+                        newIndex?.let {
+                            onSelectedDate.invoke(newDate)
+                        }
+                    }
+
+                    return@WheelTextPicker dayOfMonths.find { it.value == snappedDate.dayOfMonth }?.index
+                },
+            )
 
             // Month
             WheelTextPicker(
                 modifier = Modifier.weight(1F),
-                startIndex = months.find { it.value == snappedDate.monthNumber }?.index ?: 0,
+                endless = endless,
                 texts = months.map { it.text },
+                startIndex = months.find { it.value == initialDate.monthNumber - 1 }?.index ?: 0,
                 onScrollFinished = { index ->
+
                     val newMonth = months.find { it.index == index }?.value
 
                     newMonth?.let {
@@ -78,10 +107,12 @@ fun WheelDatePicker(
                             snappedDate = newDate
                         }
 
+                        dayOfMonths = calculateDayOfMonths(snappedDate.month.number, snappedDate.year)
+
                         val newIndex = months.find { it.value == snappedDate.monthNumber }?.index
 
                         newIndex?.let {
-
+                            onSelectedDate.invoke(newDate)
                         }
                     }
                     return@WheelTextPicker months.find { it.index == snappedDate.monthNumber }?.index
@@ -91,8 +122,9 @@ fun WheelDatePicker(
             // Year
             WheelTextPicker(
                 modifier = Modifier.weight(1F),
+                endless = endless,
                 texts = years.map { it.text },
-                startIndex = years.find { it.value == snappedDate.year }?.index ?: 0,
+                startIndex = years.find { it.value == initialDate.year }?.index ?: 0,
                 onScrollFinished = { index ->
                     val newYear = years.find { it.index == index }?.value
 
@@ -101,6 +133,14 @@ fun WheelDatePicker(
 
                         if (!newDate.isBefore(minDate) && !newDate.isAfter(maxDate)) {
                             snappedDate = newDate
+                        }
+
+                        dayOfMonths = calculateDayOfMonths(snappedDate.month.number, snappedDate.year)
+
+                        val newIndex = years.find { it.value == snappedDate.year }?.index
+
+                        newIndex?.let {
+                            onSelectedDate.invoke(newDate)
                         }
                     }
                     return@WheelTextPicker years.find { it.index == snappedDate.year }?.index
@@ -120,4 +160,92 @@ enum class DateFormat {
     DAY_MONTH_YEAR,
     MONTH_DAY_YEAR,
     YEAR_MONTH_DAY,
+}
+
+private fun calculateDayOfMonths(month: Int, year: Int): List<Item> {
+
+    val isLeapYear = LocalDate(year, month, 1).isLeapYear
+
+    val month31day = (1..31).map {
+        Item(
+            text = it.toString(),
+            value = it,
+            index = it - 1
+        )
+    }
+    val month30day = (1..30).map {
+        Item(
+            text = it.toString(),
+            value = it,
+            index = it - 1
+        )
+    }
+    val month29day = (1..29).map {
+        Item(
+            text = it.toString(),
+            value = it,
+            index = it - 1
+        )
+    }
+    val month28day = (1..28).map {
+        Item(
+            text = it.toString(),
+            value = it,
+            index = it - 1
+        )
+    }
+
+    return when (month) {
+        1 -> {
+            month31day
+        }
+
+        2 -> {
+            if (isLeapYear) month29day else month28day
+        }
+
+        3 -> {
+            month31day
+        }
+
+        4 -> {
+            month30day
+        }
+
+        5 -> {
+            month31day
+        }
+
+        6 -> {
+            month30day
+        }
+
+        7 -> {
+            month31day
+        }
+
+        8 -> {
+            month31day
+        }
+
+        9 -> {
+            month30day
+        }
+
+        10 -> {
+            month31day
+        }
+
+        11 -> {
+            month30day
+        }
+
+        12 -> {
+            month31day
+        }
+
+        else -> {
+            emptyList()
+        }
+    }
 }
