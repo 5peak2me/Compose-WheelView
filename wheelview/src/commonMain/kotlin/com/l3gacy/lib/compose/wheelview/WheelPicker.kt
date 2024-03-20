@@ -1,21 +1,28 @@
 package com.l3gacy.lib.compose.wheelview
 
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.runtime.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -48,7 +55,7 @@ fun WheelPicker(
     LaunchedEffect(isScrollInProgress, count) {
         if (!isScrollInProgress) {
             onScrollFinished(calculateSnappedItemIndex(lazyListState))?.let {
-                lazyListState.scrollToItem(it)
+                lazyListState.animateScrollToItem(it)
             }
         }
     }
@@ -62,22 +69,22 @@ fun WheelPicker(
     }
 
     Box(
-        modifier = modifier,
+        modifier = modifier
+            .height(size.height)
+            .width(size.width),
         contentAlignment = Alignment.Center
     ) {
-        if (selectorProperties.enabled().value) {
-            Surface(
-                modifier = Modifier
-                    .size(size.width, size.height / rowCount),
-                shape = selectorProperties.shape().value,
-                color = selectorProperties.color().value,
-                border = selectorProperties.border().value
-            ) {}
-        }
+//        if (selectorProperties.enabled().value) {
+//            Surface(
+//                modifier = Modifier
+//                    .size(size.width, size.height / rowCount),
+//                shape = selectorProperties.shape().value,
+//                color = selectorProperties.color().value,
+//                border = selectorProperties.border().value
+//            ) {}
+//        }
         LazyColumn(
-            modifier = Modifier
-                .height(size.height)
-                .width(size.width),
+            modifier = Modifier.fillMaxSize(),
             state = lazyListState,
             contentPadding = PaddingValues(vertical = size.height / rowCount * ((rowCount - 1) / 2)),
             flingBehavior = flingBehavior
@@ -103,6 +110,8 @@ fun WheelPicker(
                 }
             }
         }
+
+        SelectorView(offset = rowCount / 2)
     }
 }
 
@@ -136,7 +145,7 @@ private fun calculateAnimatedAlphaAndRotationX(
         distanceToCenterIndex * singleViewPortHeight.toInt() - centerIndexOffset
     val distanceToIndexSnapAbs = abs(distanceToIndexSnap)
 
-    val animatedAlpha = if (abs(distanceToIndexSnap) in 0..singleViewPortHeight.toInt()) {
+    val animatedAlpha = if (distanceToIndexSnapAbs in 0..singleViewPortHeight.toInt()) {
         1.2f - (distanceToIndexSnapAbs / singleViewPortHeight)
     } else {
         0.2f
@@ -163,6 +172,7 @@ object WheelPickerDefaults {
     )
 }
 
+@Stable
 interface SelectorProperties {
     @Composable
     fun enabled(): State<Boolean>
