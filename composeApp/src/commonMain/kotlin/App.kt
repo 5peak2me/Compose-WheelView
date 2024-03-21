@@ -1,5 +1,4 @@
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -18,10 +17,7 @@ import androidx.compose.ui.unit.sp
 import com.l3gacy.lib.compose.wheelview.WheelPicker
 import com.l3gacy.lib.compose.wheelview.picker.WheelDatePicker
 import com.l3gacy.lib.compose.wheelview.picker.WheelTimePicker
-import kotlinx.datetime.number
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun App() {
 
@@ -30,7 +26,11 @@ fun App() {
     MaterialTheme {
         var showContent by remember { mutableStateOf(false) }
         val greeting = remember { Greeting().greet() }
-        Column(Modifier.fillMaxWidth().statusBarsPadding(), horizontalAlignment = Alignment.CenterHorizontally) {
+
+        Column(
+            Modifier.fillMaxWidth().statusBarsPadding(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 //            Box(modifier = Modifier.weight(1f)) {
 //                WheelView(
 //                    modifier = Modifier,
@@ -55,13 +55,19 @@ fun App() {
 //                    },
 //                )
 //            }
-            Box(modifier = Modifier.weight(1f)) {
+            var selectedText by remember { mutableStateOf("") }
+
+            Column(
+                modifier = Modifier.weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 WheelPicker(
                     modifier = Modifier.background(Color.LightGray).fillMaxWidth(0.7F),
 //                    size = DpSize(150.dp, 25.dp),
                     itemCount = list.size,
-                    onScrollFinished = {
-                        println("selection: $it")
+                    onItemSelected = {
+                        selectedText = "selection: $it"
+                        println(selectedText)
                         it
                     },
                     content = {
@@ -73,24 +79,41 @@ fun App() {
                         )
                     },
                 )
+                Text(text = selectedText)
             }
 
-            Box(modifier = Modifier.weight(1f)) {
-//                WheelTimePicker(
-//                    modifier = Modifier.background(Color.LightGray).fillMaxWidth(0.7F),
-//                    onSelectedTime = { time ->
-//                        println("hour: ${time.hour}, minute: ${time.minute}, second: ${time.second}")
-//                    }
-//                )
-            }
+            var selectedTime by remember { mutableStateOf("") }
 
-            Box(modifier = Modifier.weight(1f)) {
-                WheelDatePicker(
-                    modifier = Modifier.background(Color.LightGray).fillMaxWidth(),
-                    onSelectedDate = { date ->
-                        println("year: ${date.year}, month: ${date.month.number}, day: ${date.dayOfMonth}")
+            Column(
+                modifier = Modifier.weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                WheelTimePicker(
+                    modifier = Modifier.background(Color.LightGray).fillMaxWidth(0.7F),
+                    endless = true,
+                    onSelectedTime = { time ->
+                        selectedTime = time.toString()
+                        println(selectedTime)
                     }
                 )
+                Text(text = selectedTime)
+            }
+
+            var selectedDate by remember { mutableStateOf("") }
+
+            Column(
+                modifier = Modifier.weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                WheelDatePicker(
+                    modifier = Modifier.background(Color.LightGray).fillMaxWidth(),
+                    endless = true,
+                    onSelectedDate = { date ->
+                        selectedDate = date.toString()
+                        println(selectedDate)
+                    }
+                )
+                Text(text = selectedDate)
             }
 
 //            Button(onClick = { showContent = !showContent }) {

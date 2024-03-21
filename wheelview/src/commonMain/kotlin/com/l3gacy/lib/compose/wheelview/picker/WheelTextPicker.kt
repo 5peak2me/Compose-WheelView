@@ -28,7 +28,7 @@ fun WheelTextPicker(
         itemCount = texts.size,
         endless = endless,
         selectorProperties = selectorProperties,
-        onScrollFinished = onScrollFinished
+        onItemSelected = onScrollFinished
     ) { index ->
         Text(
             text = texts[index],

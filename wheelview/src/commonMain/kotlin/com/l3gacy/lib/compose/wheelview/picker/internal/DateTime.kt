@@ -9,8 +9,13 @@ import kotlinx.datetime.toLocalDateTime
 import kotlin.math.min
 import kotlin.time.DurationUnit
 
-internal val String.capitalize: String
+// <editor-fold desc="String Extension" defaultstate="collapsed">
+internal inline val String.capitalize: String
     get() = replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+
+internal inline val String.padding: String
+    get() = padStart(2, '0')
+// </editor-fold>
 
 // <editor-fold desc="LocalDate" defaultstate="collapsed">
 /**

@@ -4,7 +4,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -43,7 +42,7 @@ fun WheelPicker(
     offset: Int = 3,
     endless: Boolean = true,
     selectorProperties: SelectorProperties = WheelPickerDefaults.selectorProperties(),
-    onScrollFinished: (snappedIndex: Int) -> Int? = { null },
+    onItemSelected: (index: Int) -> Int? = { null },
     content: @Composable LazyItemScope.(index: Int) -> Unit,
 ) {
 
@@ -66,19 +65,8 @@ fun WheelPicker(
                 (index + rowOffsetCount) % count - offset
             }
 
-            onScrollFinished(snappedIndex)
+            onItemSelected(snappedIndex)
             lazyListState.scrollToItem(index)
-
-
-//            onScrollFinished(calculateSnappedItemIndex(lazyListState))?.let {
-//                val index = if (endless) {
-//                    (it + rowOffsetCount) % itemCount
-//                } else {
-//                    ((it + rowOffsetCount) % count) - offset
-//                }
-//                println("Snapped index: $it -> $index")
-//                lazyListState.scrollToItem(it)
-//            }
         }
     }
 
@@ -105,10 +93,10 @@ fun WheelPicker(
 //                border = selectorProperties.border().value
 //            ) {}
 //        }
+
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = lazyListState,
-//            contentPadding = PaddingValues(vertical = height / rowCount * ((rowCount - 1) / 2)),
             flingBehavior = flingBehavior
         ) {
             items(if (endless) Int.MAX_VALUE else count) { index ->
@@ -124,7 +112,7 @@ fun WheelPicker(
                         .fillMaxWidth()
                         .alpha(newAlpha)
                         .graphicsLayer {
-//                            rotationX = newRotationX
+                            rotationX = newRotationX
                         },
                     contentAlignment = Alignment.Center
                 ) {
@@ -133,12 +121,12 @@ fun WheelPicker(
                     } else if (index >= rowOffsetCount && index < itemCount + rowOffsetCount) {
                         content((index - rowOffsetCount) % itemCount)
                     }
-//                    content(index)
                 }
             }
         }
 
         SelectorView(offset = rowCount / 2)
+
     }
 }
 
@@ -162,7 +150,8 @@ private fun calculateAnimatedAlphaAndRotationX(
     val viewPortHeight = layoutInfo.viewportSize.height.toFloat()
     val singleViewPortHeight = viewPortHeight / rowCount
 
-    val centerIndex = remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }.value
+    val centerIndex =
+        remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }.value + rowCount / 2
     val centerIndexOffset =
         remember { derivedStateOf { lazyListState.firstVisibleItemScrollOffset } }.value
 

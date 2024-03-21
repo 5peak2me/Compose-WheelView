@@ -14,6 +14,7 @@ import com.l3gacy.lib.compose.wheelview.picker.internal.MIN
 import com.l3gacy.lib.compose.wheelview.picker.internal.isAfter
 import com.l3gacy.lib.compose.wheelview.picker.internal.isBefore
 import com.l3gacy.lib.compose.wheelview.picker.internal.now
+import com.l3gacy.lib.compose.wheelview.picker.internal.padding
 import com.l3gacy.lib.compose.wheelview.picker.internal.withHour
 import com.l3gacy.lib.compose.wheelview.picker.internal.withMinute
 import com.l3gacy.lib.compose.wheelview.picker.internal.withSecond
@@ -26,14 +27,14 @@ fun WheelTimePicker(
     minTime: LocalTime = LocalTime.MIN,
     maxTime: LocalTime = LocalTime.MAX,
     timeFormat: TimeFormat = TimeFormat.HOUR_24,
-    endless: Boolean = false,
+    endless: Boolean = true,
     onSelectedTime: (LocalTime) -> Unit,
 ) {
 
     var snappedTime by remember { mutableStateOf(LocalTime(initialTime.hour, initialTime.minute)) }
     val hours = (0..23).map {
         Hour(
-            text = it.toString().padStart(2, '0'),
+            text = it.toString().padding,
             value = it,
             index = it
         )
@@ -48,7 +49,7 @@ fun WheelTimePicker(
 
     val minutes = (0..59).map {
         Minute(
-            text = it.toString().padStart(2, '0'),
+            text = it.toString().padding,
             value = it,
             index = it
         )
