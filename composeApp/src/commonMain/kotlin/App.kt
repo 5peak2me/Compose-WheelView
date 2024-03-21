@@ -55,49 +55,50 @@ fun App() {
 //                    },
 //                )
 //            }
-            var selectedText by remember { mutableStateOf("") }
 
-            Column(
-                modifier = Modifier.weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                WheelPicker(
-                    modifier = Modifier.background(Color.LightGray).fillMaxWidth(0.7F),
-//                    size = DpSize(150.dp, 25.dp),
-                    itemCount = list.size,
-                    onItemSelected = {
-                        selectedText = "selection: $it"
-                        println(selectedText)
-                        it
-                    },
-                    content = {
-                        Text(
-                            text = list[it],
-                            textAlign = TextAlign.Start,
-                            fontSize = 17.sp,
-                            color = MaterialTheme.colors.onSurface
-                        )
-                    },
-                )
-                Text(text = selectedText)
-            }
+//            var selectedText by remember { mutableStateOf("") }
+//
+//            Column(
+//                modifier = Modifier.weight(1f),
+//                horizontalAlignment = Alignment.CenterHorizontally
+//            ) {
+//                WheelPicker(
+//                    modifier = Modifier.background(Color.LightGray).fillMaxWidth(0.7F),
+////                    size = DpSize(150.dp, 25.dp),
+//                    itemCount = list.size,
+//                    onItemSelected = {
+//                        selectedText = "selection: $it"
+//                        println(selectedText)
+//                        it
+//                    },
+//                    content = {
+//                        Text(
+//                            text = list[it],
+//                            textAlign = TextAlign.Start,
+//                            fontSize = 17.sp,
+//                            color = MaterialTheme.colors.onSurface
+//                        )
+//                    },
+//                )
+//                Text(text = selectedText)
+//            }
 
-            var selectedTime by remember { mutableStateOf("") }
-
-            Column(
-                modifier = Modifier.weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                WheelTimePicker(
-                    modifier = Modifier.background(Color.LightGray).fillMaxWidth(0.7F),
-                    endless = true,
-                    onSelectedTime = { time ->
-                        selectedTime = time.toString()
-                        println(selectedTime)
-                    }
-                )
-                Text(text = selectedTime)
-            }
+//            var selectedTime by remember { mutableStateOf("") }
+//
+//            Column(
+//                modifier = Modifier.weight(1f),
+//                horizontalAlignment = Alignment.CenterHorizontally
+//            ) {
+//                WheelTimePicker(
+//                    modifier = Modifier.background(Color.LightGray).fillMaxWidth(0.7F),
+//                    endless = true,
+//                    onSelectedTime = { time ->
+//                        selectedTime = time.toString()
+//                        println(selectedTime)
+//                    }
+//                )
+//                Text(text = selectedTime)
+//            }
 
             var selectedDate by remember { mutableStateOf("") }
 
@@ -106,7 +107,9 @@ fun App() {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 WheelDatePicker(
-                    modifier = Modifier.background(Color.LightGray).fillMaxWidth(),
+                    modifier = Modifier
+//                        .background(Color.LightGray)
+                        .fillMaxWidth(),
                     endless = true,
                     onSelectedDate = { date ->
                         selectedDate = date.toString()

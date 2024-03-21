@@ -12,7 +12,7 @@ import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
@@ -178,8 +178,8 @@ object WheelPickerDefaults {
     fun selectorProperties(
         enabled: Boolean = true,
         shape: Shape = RoundedCornerShape(12.dp),
-        color: Color = MaterialTheme.colors.primary.copy(alpha = 0.2f),
-        border: BorderStroke? = BorderStroke(1.dp, MaterialTheme.colors.primary),
+        color: Color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+        border: BorderStroke? = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
     ): SelectorProperties = DefaultSelectorProperties(
         enabled = enabled,
         shape = shape,
