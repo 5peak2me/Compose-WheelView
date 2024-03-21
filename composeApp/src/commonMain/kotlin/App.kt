@@ -113,7 +113,7 @@ fun App() {
                     endless = true,
                     onSelectedDate = { date ->
                         selectedDate = date.toString()
-                        println(selectedDate)
+//                        println(selectedDate)
                     }
                 )
                 Text(text = selectedDate)

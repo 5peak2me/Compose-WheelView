@@ -72,10 +72,13 @@ fun WheelDatePicker(
                 initialIndex = dayOfMonths.find { it.value == initialDate.dayOfMonth }?.index ?: 0,
             ) { index ->
                 val newDayOfMonth = dayOfMonths.find { it.index == index }?.value
+
+                println("Day: $newDayOfMonth")
+
                 newDayOfMonth?.let {
                     val newDate = snappedDate.withDayOfMonth(newDayOfMonth)
 
-                    println("Day: $newDate")
+//                    println("Day: $newDate")
 
                     if (!newDate.isBefore(minDate) && !newDate.isAfter(maxDate)) {
                         snappedDate = newDate
@@ -101,10 +104,13 @@ fun WheelDatePicker(
 
                 val newMonth = months.find { it.index == index }?.value
 
+                println("Month: $newMonth")
+
+
                 newMonth?.let {
                     val newDate = snappedDate.withMonth(newMonth)
 
-                    println("Month: $newDate")
+//                    println("Month: $newDate")
 
                     if (!newDate.isBefore(minDate) && !newDate.isAfter(maxDate)) {
                         snappedDate = newDate
