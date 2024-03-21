@@ -80,7 +80,7 @@ fun App() {
                 WheelTimePicker(
                     modifier = Modifier.background(Color.LightGray).fillMaxWidth(0.7F),
                     onSelectedTime = { time ->
-                        println("hour: ${time.hour}, minute: ${time.minute}")
+                        println("hour: ${time.hour}, minute: ${time.minute}, second: ${time.second}")
                     }
                 )
             }

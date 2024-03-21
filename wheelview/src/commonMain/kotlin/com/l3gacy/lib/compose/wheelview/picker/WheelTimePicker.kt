@@ -16,6 +16,7 @@ import com.l3gacy.lib.compose.wheelview.picker.internal.isBefore
 import com.l3gacy.lib.compose.wheelview.picker.internal.now
 import com.l3gacy.lib.compose.wheelview.picker.internal.withHour
 import com.l3gacy.lib.compose.wheelview.picker.internal.withMinute
+import com.l3gacy.lib.compose.wheelview.picker.internal.withSecond
 import kotlinx.datetime.LocalTime
 
 @Composable
@@ -209,8 +210,22 @@ fun WheelTimePicker(
 
                 val newSecond = minutes.find { it.index == snappedIndex }?.value
 
+                newSecond?.let {
+                    val newTime = snappedTime.withSecond(newSecond)
 
-                return@WheelTextPicker 1
+                    if (!newTime.isBefore(minTime) && !newTime.isAfter(maxTime)) {
+                        snappedTime = newTime
+                    }
+
+                    val newIndex = minutes.find { it.value == snappedTime.second }?.index
+
+                    newIndex?.let {
+                        onSelectedTime.invoke(snappedTime.withSecond(it))
+                    }
+                }
+
+
+                return@WheelTextPicker minutes.find { it.value == snappedTime.second }?.index
             }
         }
 

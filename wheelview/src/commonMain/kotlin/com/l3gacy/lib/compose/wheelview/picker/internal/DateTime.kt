@@ -144,14 +144,14 @@ internal val LocalTime.Companion.MIN: LocalTime
 internal val LocalTime.Companion.MAX: LocalTime
     get() = LocalTime(23, 59, 59, 999_999_999)
 
-internal fun LocalTime.withMinute(minute: Int): LocalTime {
-    return if (this.minute == minute) {
-        this
-    } else {
-        LocalTime(hour, minute, second, nanosecond)
-    }
-}
-
+/**
+ * Returns a copy of this [LocalTime] with the hour-of-day altered.
+ * <p>
+ * This instance is immutable and unaffected by this method call.
+ *
+ * @param hour  the hour-of-day to set in the result, from 0 to 23
+ * @return a {@code LocalTime} based on this time with the requested hour, not null
+ */
 internal fun LocalTime.withHour(hour: Int): LocalTime {
     return if (this.hour == hour) {
         this
@@ -160,8 +160,58 @@ internal fun LocalTime.withHour(hour: Int): LocalTime {
     }
 }
 
+/**
+ * Returns a copy of this [LocalTime] with the minute-of-hour altered.
+ * <p>
+ * This instance is immutable and unaffected by this method call.
+ *
+ * @param minute  the minute-of-hour to set in the result, from 0 to 59
+ * @return a {@code LocalTime} based on this time with the requested minute, not null
+ */
+internal fun LocalTime.withMinute(minute: Int): LocalTime {
+    return if (this.minute == minute) {
+        this
+    } else {
+        LocalTime(hour, minute, second, nanosecond)
+    }
+}
+
+/**
+ * Returns a copy of this [LocalTime] with the second-of-minute altered.
+ * <p>
+ * This instance is immutable and unaffected by this method call.
+ *
+ * @param second  the second-of-minute to set in the result, from 0 to 59
+ * @return a {@code LocalTime} based on this time with the requested second, not null
+ */
+internal fun LocalTime.withSecond(second: Int): LocalTime {
+    return if (this.second == second) {
+        this
+    } else {
+        LocalTime(hour, minute, second, nanosecond)
+    }
+}
+
+/**
+ * Checks if this time is before the specified time.
+ * <p>
+ * The comparison is based on the time-line position of the time within a day.
+ *
+ * @param other  the other time to compare to, not null
+ * @return true if this point is before the specified time
+ * @throws NullPointerException if {@code other} is null
+ */
 internal fun LocalTime.isBefore(other: LocalTime): Boolean = compareTo(other) < 0
 
+/**
+ * Checks if this time is after the specified time.
+ * <p>
+ * The comparison is based on the time-line position of the time within a day.
+ *
+ * @param other  the other time to compare to, not null
+ * @return true if this is after the specified time
+ * @throws NullPointerException if {@code other} is null
+ */
 internal fun LocalTime.isAfter(other: LocalTime): Boolean = compareTo(other) > 0
 // </editor-fold>
 
@@ -184,24 +234,85 @@ internal fun LocalDateTime.with(date: LocalDate, time: LocalTime): LocalDateTime
     }
 }
 
+/**
+ * Returns a copy of this [LocalDateTime] with the year altered.
+ * <p>
+ * The time does not affect the calculation and will be the same in the result.
+ * If the day-of-month is invalid for the year, it will be changed to the last valid day of the month.
+ * <p>
+ * This instance is immutable and unaffected by this method call.
+ *
+ * @param year  the year to set in the result, from MIN_YEAR to MAX_YEAR
+ * @return a [LocalDateTime] based on this date-time with the requested year, not null
+ */
 internal fun LocalDateTime.withYear(year: Int): LocalDateTime {
     return with(date.withYear(year), time)
 }
 
-internal fun LocalDateTime.withMonthNumber(monthNumber: Int): LocalDateTime {
-    return with(date.withMonth(monthNumber), time)
+/**
+ * Returns a copy of this [LocalDateTime] with the month-of-year altered.
+ * <p>
+ * The time does not affect the calculation and will be the same in the result.
+ * If the day-of-month is invalid for the year, it will be changed to the last valid day of the month.
+ * <p>
+ * This instance is immutable and unaffected by this method call.
+ *
+ * @param month  the month-of-year to set in the result, from 1 (January) to 12 (December)
+ * @return a [LocalDateTime] based on this date-time with the requested month, not null
+ */
+internal fun LocalDateTime.withMonth(month: Int): LocalDateTime {
+    return with(date.withMonth(month), time)
 }
 
+/**
+ * Returns a copy of this [LocalDateTime] with the day-of-month altered.
+ * <p>
+ * If the resulting date-time is invalid, an exception is thrown.
+ * The time does not affect the calculation and will be the same in the result.
+ * <p>
+ * This instance is immutable and unaffected by this method call.
+ *
+ * @param dayOfMonth  the day-of-month to set in the result, from 1 to 28-31
+ * @return a [LocalDateTime] based on this date-time with the requested day, not null
+ */
 internal fun LocalDateTime.withDayOfMonth(dayOfMonth: Int): LocalDateTime {
     return with(date.withDayOfMonth(dayOfMonth), time)
 }
 
+/**
+ * Returns a copy of this [LocalDateTime] with the hour-of-day altered.
+ * <p>
+ * This instance is immutable and unaffected by this method call.
+ *
+ * @param hour  the hour-of-day to set in the result, from 0 to 23
+ * @return a [LocalDateTime] based on this date-time with the requested hour, not null
+ */
 internal fun LocalDateTime.withHour(hour: Int): LocalDateTime {
     return with(date, time.withHour(hour))
 }
 
+/**
+ * Returns a copy of this [LocalDateTime] with the minute-of-hour altered.
+ * <p>
+ * This instance is immutable and unaffected by this method call.
+ *
+ * @param minute  the minute-of-hour to set in the result, from 0 to 59
+ * @return a [LocalDateTime] based on this date-time with the requested minute, not null
+ */
 internal fun LocalDateTime.withMinute(minute: Int): LocalDateTime {
     return with(date, time.withMinute(minute))
+}
+
+/**
+ * Returns a copy of this [LocalDateTime] with the second-of-minute altered.
+ * <p>
+ * This instance is immutable and unaffected by this method call.
+ *
+ * @param second  the second-of-minute to set in the result, from 0 to 59
+ * @return a [LocalDateTime] based on this date-time with the requested second, not null
+ */
+internal fun LocalDateTime.withSecond(second: Int): LocalDateTime {
+    return with(date, time.withSecond(second))
 }
 
 internal fun LocalDateTime.isBefore(other: LocalDateTime): Boolean = compareTo(other) < 0
