@@ -25,7 +25,7 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 @Composable
 fun App() {
 
-    val list = (1..1200).map { "item $it" }
+    val list = (1..12).map { "item $it" }
 
     MaterialTheme {
         var showContent by remember { mutableStateOf(false) }
@@ -59,10 +59,9 @@ fun App() {
                 WheelPicker(
                     modifier = Modifier.background(Color.LightGray).fillMaxWidth(0.7F),
 //                    size = DpSize(150.dp, 25.dp),
-                    count = list.size,
-                    rowCount = 7,
+                    itemCount = list.size,
                     onScrollFinished = {
-//                        println("selection: $it")
+                        println("selection: $it")
                         it
                     },
                     content = {
@@ -77,12 +76,12 @@ fun App() {
             }
 
             Box(modifier = Modifier.weight(1f)) {
-                WheelTimePicker(
-                    modifier = Modifier.background(Color.LightGray).fillMaxWidth(0.7F),
-                    onSelectedTime = { time ->
-                        println("hour: ${time.hour}, minute: ${time.minute}, second: ${time.second}")
-                    }
-                )
+//                WheelTimePicker(
+//                    modifier = Modifier.background(Color.LightGray).fillMaxWidth(0.7F),
+//                    onSelectedTime = { time ->
+//                        println("hour: ${time.hour}, minute: ${time.minute}, second: ${time.second}")
+//                    }
+//                )
             }
 
             Box(modifier = Modifier.weight(1f)) {

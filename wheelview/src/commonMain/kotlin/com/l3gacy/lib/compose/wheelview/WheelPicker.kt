@@ -38,14 +38,20 @@ import kotlin.math.abs
 @Composable
 fun WheelPicker(
     modifier: Modifier = Modifier,
-    startIndex: Int = 0,
-    count: Int,
-    rowCount: Int,
+    initialIndex: Int = 0,
+    itemCount: Int,
+    offset: Int = 3,
     endless: Boolean = true,
     selectorProperties: SelectorProperties = WheelPickerDefaults.selectorProperties(),
     onScrollFinished: (snappedIndex: Int) -> Int? = { null },
     content: @Composable LazyItemScope.(index: Int) -> Unit,
 ) {
+
+    val count = if (endless) itemCount else itemCount + 2 * offset
+    val rowOffsetCount = maxOf(1, minOf(offset, 4))
+    val rowCount = ((rowOffsetCount * 2) + 1)
+    val startIndex = if (endless) initialIndex + (itemCount * 1000) - offset else initialIndex
+
     val height = remember { 210.dp } // 3 * 5 * 7
     val lazyListState = rememberLazyListState(startIndex)
     val flingBehavior = rememberSnapFlingBehavior(lazyListState)
@@ -53,9 +59,26 @@ fun WheelPicker(
 
     LaunchedEffect(isScrollInProgress, count) {
         if (!isScrollInProgress) {
-            onScrollFinished(calculateSnappedItemIndex(lazyListState))?.let {
-                lazyListState.scrollToItem(it)
+            val index = calculateSnappedItemIndex(lazyListState)
+            val snappedIndex = if (endless) {
+                (index + rowOffsetCount) % itemCount
+            } else {
+                (index + rowOffsetCount) % count - offset
             }
+
+            onScrollFinished(snappedIndex)
+            lazyListState.scrollToItem(index)
+
+
+//            onScrollFinished(calculateSnappedItemIndex(lazyListState))?.let {
+//                val index = if (endless) {
+//                    (it + rowOffsetCount) % itemCount
+//                } else {
+//                    ((it + rowOffsetCount) % count) - offset
+//                }
+//                println("Snapped index: $it -> $index")
+//                lazyListState.scrollToItem(it)
+//            }
         }
     }
 
@@ -85,10 +108,10 @@ fun WheelPicker(
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = lazyListState,
-            contentPadding = PaddingValues(vertical = height / rowCount * ((rowCount - 1) / 2)),
+//            contentPadding = PaddingValues(vertical = height / rowCount * ((rowCount - 1) / 2)),
             flingBehavior = flingBehavior
         ) {
-            items(count) { index ->
+            items(if (endless) Int.MAX_VALUE else count) { index ->
                 val (newAlpha, newRotationX) = calculateAnimatedAlphaAndRotationX(
                     lazyListState = lazyListState,
                     index = index,
@@ -101,16 +124,21 @@ fun WheelPicker(
                         .fillMaxWidth()
                         .alpha(newAlpha)
                         .graphicsLayer {
-                            rotationX = newRotationX
+//                            rotationX = newRotationX
                         },
                     contentAlignment = Alignment.Center
                 ) {
-                    content(index)
+                    if (endless) {
+                        content(index % itemCount)
+                    } else if (index >= rowOffsetCount && index < itemCount + rowOffsetCount) {
+                        content((index - rowOffsetCount) % itemCount)
+                    }
+//                    content(index)
                 }
             }
         }
 
-//        SelectorView(offset = rowCount / 2)
+        SelectorView(offset = rowCount / 2)
     }
 }
 

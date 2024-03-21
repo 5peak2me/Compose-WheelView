@@ -14,9 +14,8 @@ import com.l3gacy.lib.compose.wheelview.WheelPickerDefaults
 @Composable
 fun WheelTextPicker(
     modifier: Modifier = Modifier,
-    startIndex: Int = 0,
+    initialIndex: Int = 0,
     texts: List<String>,
-    rowCount: Int = 7,
     endless: Boolean = true,
     style: TextStyle = MaterialTheme.typography.h6,
     color: Color = LocalContentColor.current,
@@ -25,9 +24,8 @@ fun WheelTextPicker(
 ) {
     WheelPicker(
         modifier = modifier,
-        startIndex = startIndex,
-        count = texts.size,
-        rowCount = rowCount,
+        initialIndex = initialIndex,
+        itemCount = texts.size,
         endless = endless,
         selectorProperties = selectorProperties,
         onScrollFinished = onScrollFinished

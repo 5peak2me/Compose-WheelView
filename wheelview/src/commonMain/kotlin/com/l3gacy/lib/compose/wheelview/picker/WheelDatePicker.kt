@@ -69,7 +69,7 @@ fun WheelDatePicker(
                 modifier = Modifier.weight(1F),
                 endless = endless,
                 texts = dayOfMonths.map { it.text },
-                startIndex = dayOfMonths.find { it.value == initialDate.dayOfMonth }?.index ?: 0,
+                initialIndex = dayOfMonths.find { it.value == initialDate.dayOfMonth }?.index ?: 0,
             ) { snappedIndex ->
                 val newDayOfMonth = dayOfMonths.find { it.index == snappedIndex }?.value
                 newDayOfMonth?.let {
@@ -94,7 +94,7 @@ fun WheelDatePicker(
                 modifier = Modifier.weight(1F),
                 endless = endless,
                 texts = months.map { it.text },
-                startIndex = months.find { it.value == initialDate.monthNumber }?.index ?: 0
+                initialIndex = months.find { it.value == initialDate.monthNumber }?.index ?: 0
             ) { snappedIndex ->
 
                 val newMonth = months.find { it.index == snappedIndex }?.value
@@ -122,7 +122,7 @@ fun WheelDatePicker(
                 modifier = Modifier.weight(1F),
                 endless = endless,
                 texts = years.map { it.text },
-                startIndex = years.find { it.value == initialDate.year }?.index ?: 0
+                initialIndex = years.find { it.value == initialDate.year }?.index ?: 0
             ) { index ->
                 val newYear = years.find { it.index == index }?.value
 

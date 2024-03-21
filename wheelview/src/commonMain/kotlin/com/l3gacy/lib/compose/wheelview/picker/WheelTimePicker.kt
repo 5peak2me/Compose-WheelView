@@ -80,7 +80,7 @@ fun WheelTimePicker(
                     modifier = Modifier.weight(1F),
                     endless = endless,
                     texts = amPms.map { it.text },
-                    startIndex = amPms.find { it.value == amPmValueFromTime(initialTime) }?.index ?: 0
+                    initialIndex = amPms.find { it.value == amPmValueFromTime(initialTime) }?.index ?: 0
                 ) { snappedIndex ->
                     val newAmPm = amPms.find {
                         if (snappedIndex == 2) {
@@ -125,7 +125,7 @@ fun WheelTimePicker(
                 modifier = Modifier.weight(1F),
                 endless = endless,
                 texts = if (timeFormat == TimeFormat.HOUR_24) hours.map { it.text } else amPmHours.map { it.text },
-                startIndex = if (timeFormat == TimeFormat.HOUR_24) {
+                initialIndex = if (timeFormat == TimeFormat.HOUR_24) {
                     hours.find { it.value == initialTime.hour }?.index ?: 0
                 } else amPmHours.find { it.value == localTimeToAmPmHour(initialTime) }?.index ?: 0
             ) { snappedIndex ->
@@ -167,7 +167,7 @@ fun WheelTimePicker(
                 modifier = Modifier.weight(1F),
                 endless = endless,
                 texts = minutes.map { it.text },
-                startIndex = minutes.find { it.value == initialTime.minute }?.index ?: 0
+                initialIndex = minutes.find { it.value == initialTime.minute }?.index ?: 0
             ) { snappedIndex ->
                 val newMinute = minutes.find { it.index == snappedIndex }?.value
 
@@ -205,7 +205,7 @@ fun WheelTimePicker(
                 modifier = Modifier.weight(1F),
                 endless = endless,
                 texts = minutes.map { it.text },
-                startIndex = minutes.find { it.value == initialTime.second }?.index ?: 0,
+                initialIndex = minutes.find { it.value == initialTime.second }?.index ?: 0,
             ) { snappedIndex ->
 
                 val newSecond = minutes.find { it.index == snappedIndex }?.value
