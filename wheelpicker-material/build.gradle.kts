@@ -65,7 +65,7 @@ android {
 
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
+//        targetSdk = libs.versions.android.targetSdk.get().toInt()
     }
     publishing {
         singleVariant("release") {

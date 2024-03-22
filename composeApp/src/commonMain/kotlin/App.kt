@@ -1,4 +1,3 @@
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -11,12 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.sp
-import com.l3gacy.lib.compose.wheelview.WheelPicker
-import com.l3gacy.lib.compose.wheelview.picker.WheelDatePicker
-import com.l3gacy.lib.compose.wheelview.picker.WheelTimePicker
+import com.l3gacy.lib.compose.wheelpicker.WheelDatePicker
 
 @Composable
 fun App() {
