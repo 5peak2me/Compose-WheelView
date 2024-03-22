@@ -1,4 +1,4 @@
-package com.l3gacy.lib.compose.wheelview.picker.internal
+package com.l3gacy.lib.compose.wheelpicker.internal
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate

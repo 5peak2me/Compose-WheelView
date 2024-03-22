@@ -1,4 +1,4 @@
-package com.l3gacy.lib.compose.wheelview.picker
+package com.l3gacy.lib.compose.wheelpicker
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -9,15 +9,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.l3gacy.lib.compose.wheelview.picker.internal.MAX
-import com.l3gacy.lib.compose.wheelview.picker.internal.MIN
-import com.l3gacy.lib.compose.wheelview.picker.internal.isAfter
-import com.l3gacy.lib.compose.wheelview.picker.internal.isBefore
-import com.l3gacy.lib.compose.wheelview.picker.internal.now
-import com.l3gacy.lib.compose.wheelview.picker.internal.padding
-import com.l3gacy.lib.compose.wheelview.picker.internal.withHour
-import com.l3gacy.lib.compose.wheelview.picker.internal.withMinute
-import com.l3gacy.lib.compose.wheelview.picker.internal.withSecond
+import com.l3gacy.lib.compose.wheelpicker.internal.MAX
+import com.l3gacy.lib.compose.wheelpicker.internal.MIN
+import com.l3gacy.lib.compose.wheelpicker.internal.isAfter
+import com.l3gacy.lib.compose.wheelpicker.internal.isBefore
+import com.l3gacy.lib.compose.wheelpicker.internal.now
+import com.l3gacy.lib.compose.wheelpicker.internal.padding
+import com.l3gacy.lib.compose.wheelpicker.internal.withHour
+import com.l3gacy.lib.compose.wheelpicker.internal.withMinute
+import com.l3gacy.lib.compose.wheelpicker.internal.withSecond
 import kotlinx.datetime.LocalTime
 
 @Composable

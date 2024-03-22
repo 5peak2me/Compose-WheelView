@@ -1,4 +1,4 @@
-package com.l3gacy.lib.compose.wheelview.picker
+package com.l3gacy.lib.compose.wheelpicker
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -9,16 +9,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.l3gacy.lib.compose.wheelview.picker.internal.EPOCH
-import com.l3gacy.lib.compose.wheelview.picker.internal.MAX
-import com.l3gacy.lib.compose.wheelview.picker.internal.capitalize
-import com.l3gacy.lib.compose.wheelview.picker.internal.isAfter
-import com.l3gacy.lib.compose.wheelview.picker.internal.isBefore
-import com.l3gacy.lib.compose.wheelview.picker.internal.isLeapYear
-import com.l3gacy.lib.compose.wheelview.picker.internal.now
-import com.l3gacy.lib.compose.wheelview.picker.internal.withDayOfMonth
-import com.l3gacy.lib.compose.wheelview.picker.internal.withMonth
-import com.l3gacy.lib.compose.wheelview.picker.internal.withYear
+import com.l3gacy.lib.compose.wheelpicker.internal.EPOCH
+import com.l3gacy.lib.compose.wheelpicker.internal.MAX
+import com.l3gacy.lib.compose.wheelpicker.internal.capitalize
+import com.l3gacy.lib.compose.wheelpicker.internal.isAfter
+import com.l3gacy.lib.compose.wheelpicker.internal.isBefore
+import com.l3gacy.lib.compose.wheelpicker.internal.isLeapYear
+import com.l3gacy.lib.compose.wheelpicker.internal.now
+import com.l3gacy.lib.compose.wheelpicker.internal.withDayOfMonth
+import com.l3gacy.lib.compose.wheelpicker.internal.withMonth
+import com.l3gacy.lib.compose.wheelpicker.internal.withYear
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
 import kotlinx.datetime.number

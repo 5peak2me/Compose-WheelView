@@ -24,4 +24,5 @@ include(":composeApp")
 include(":iosApp")
 
 include(":wheelview")
-include(":wheelview-material3")
+include(":wheelpicker-material")
+include(":wheelpicker-material3")
