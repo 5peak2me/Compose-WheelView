@@ -20,6 +20,7 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
@@ -31,6 +32,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import kotlin.math.abs
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -39,34 +41,46 @@ fun WheelPicker(
     modifier: Modifier = Modifier,
     initialIndex: Int = 0,
     itemCount: Int,
-    offset: Int = 3,
+    rowOffset: Int = 3,
     endless: Boolean = true,
     selectorProperties: SelectorProperties = WheelPickerDefaults.selectorProperties(),
     onItemSelected: (index: Int) -> Int? = { null },
     content: @Composable LazyItemScope.(index: Int) -> Unit,
 ) {
 
-    val count = if (endless) itemCount else itemCount + 2 * offset
-    val rowOffsetCount = maxOf(1, minOf(offset, 4))
+    val coroutineScope = rememberCoroutineScope()
+
+    val count = if (endless) itemCount else itemCount + 2 * rowOffset
+    val rowOffsetCount = maxOf(1, minOf(rowOffset, 4))
     val rowCount = ((rowOffsetCount * 2) + 1)
-    val startIndex = if (endless) initialIndex + (itemCount * 1000) - offset else initialIndex
+    val startIndex = if (endless) initialIndex + (itemCount * 1000) - rowOffset else initialIndex
 
     val height = remember { 210.dp } // 3 * 5 * 7
     val lazyListState = rememberLazyListState(startIndex)
     val flingBehavior = rememberSnapFlingBehavior(lazyListState)
     val isScrollInProgress = lazyListState.isScrollInProgress
 
-    LaunchedEffect(isScrollInProgress, count) {
+//    LaunchedEffect(key1 = itemCount) {
+//        coroutineScope.launch {
+//            lazyListState.scrollToItem(startIndex)
+//        }
+//    }
+
+    LaunchedEffect(isScrollInProgress) {
         if (!isScrollInProgress) {
             val index = calculateSnappedItemIndex(lazyListState)
             val snappedIndex = if (endless) {
                 (index + rowOffsetCount) % itemCount
             } else {
-                (index + rowOffsetCount) % count - offset
+                (index + rowOffsetCount) % count - rowOffset
             }
 
             onItemSelected(snappedIndex)
-            lazyListState.scrollToItem(index)
+            if (lazyListState.firstVisibleItemScrollOffset != 0) {
+                coroutineScope.launch {
+                    lazyListState.animateScrollToItem(snappedIndex)
+                }
+            }
         }
     }
 
@@ -125,7 +139,7 @@ fun WheelPicker(
             }
         }
 
-        SelectorView(offset = offset)
+        SelectorView(offset = rowOffset)
 
     }
 }
