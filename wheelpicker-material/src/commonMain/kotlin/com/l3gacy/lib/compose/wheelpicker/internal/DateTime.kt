@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.l3gacy.lib.compose.wheelpicker.internal
 
 import kotlinx.datetime.Clock
@@ -123,8 +125,25 @@ internal fun resolvePreviousValid(year: Int, month: Int, day: Int): LocalDate {
 /**
  * Checks if the year is a leap year, according to the ISO proleptic calendar system rules.
  */
+@Suppress("SpellCheckingInspection")
 internal fun isLeapYear(prolepticYear: Int): Boolean {
     return prolepticYear % 4 == 0 && (prolepticYear % 100 != 0 || prolepticYear % 400 == 0)
+}
+
+/**
+ * Returns the length of the month represented by this date.
+ * <p>
+ * This returns the length of the month in days.
+ * For example, a date in January would return 31.
+ *
+ * @return the length of the month in days
+ */
+internal fun LocalDate.lengthOfMonth(): Int {
+    return when (monthNumber) {
+        2 -> if (isLeapYear) 29 else 28
+        4, 6, 9, 11 -> 30
+        else -> 31
+    }
 }
 
 /**

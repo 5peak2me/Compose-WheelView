@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import com.l3gacy.lib.compose.wheelpicker.internal.EPOCH
 import com.l3gacy.lib.compose.wheelpicker.internal.MAX
 import com.l3gacy.lib.compose.wheelpicker.internal.capitalize
-import com.l3gacy.lib.compose.wheelpicker.internal.isLeapYear
+import com.l3gacy.lib.compose.wheelpicker.internal.lengthOfMonth
 import com.l3gacy.lib.compose.wheelpicker.internal.now
 import com.l3gacy.lib.compose.wheelpicker.internal.withDayOfMonth
 import com.l3gacy.lib.compose.wheelpicker.internal.withMonth
@@ -41,7 +41,13 @@ fun WheelDatePicker(
 ) {
     var snappedDate by remember { mutableStateOf(initialDate) }
 
-    val dayOfMonths = snappedDate.calculateDayOfMonths()
+    val dayOfMonths = (1..snappedDate.lengthOfMonth()).mapIndexed { index, item ->
+        Item(
+            text = item.toString(),
+            value = item,
+            index = index
+        )
+    }
 
     val months = (1..12).mapIndexed { index, item ->
         Item(
@@ -113,20 +119,4 @@ enum class DateFormat {
     DAY_MONTH_YEAR,
     MONTH_DAY_YEAR,
     YEAR_MONTH_DAY,
-}
-
-private fun LocalDate.calculateDayOfMonths(): List<Item> {
-    val days = when (monthNumber) {
-        2 -> if (isLeapYear) 29 else 28
-        4, 6, 9, 11 -> 30
-        else -> 31
-    }
-
-    return (1..days).mapIndexed { index, item ->
-        Item(
-            text = item.toString(),
-            value = item,
-            index = index
-        )
-    }
 }
