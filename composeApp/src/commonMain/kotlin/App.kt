@@ -1,3 +1,4 @@
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -10,7 +11,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import com.l3gacy.lib.compose.wheelpicker.WheelDatePicker
+import com.l3gacy.lib.compose.wheelpicker.WheelTimePicker
 
 @Composable
 fun App() {
@@ -77,22 +80,22 @@ fun App() {
 //                Text(text = selectedText)
 //            }
 
-//            var selectedTime by remember { mutableStateOf("") }
-//
-//            Column(
-//                modifier = Modifier.weight(1f),
-//                horizontalAlignment = Alignment.CenterHorizontally
-//            ) {
-//                WheelTimePicker(
-//                    modifier = Modifier.background(Color.LightGray).fillMaxWidth(0.7F),
-//                    endless = true,
-//                    onSelectedTime = { time ->
-//                        selectedTime = time.toString()
-//                        println(selectedTime)
-//                    }
-//                )
-//                Text(text = selectedTime)
-//            }
+            var selectedTime by remember { mutableStateOf("") }
+
+            Column(
+                modifier = Modifier.weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                WheelTimePicker(
+                    modifier = Modifier.background(Color.LightGray).fillMaxWidth(0.7F),
+                    endless = true,
+                    onSelectedTime = { time ->
+                        selectedTime = time.toString()
+                        println(selectedTime)
+                    }
+                )
+                Text(text = selectedTime)
+            }
 
             var selectedDate by remember { mutableStateOf("") }
 
@@ -102,7 +105,7 @@ fun App() {
             ) {
                 WheelDatePicker(
                     modifier = Modifier
-//                        .background(Color.LightGray)
+                        .background(Color.LightGray)
                         .fillMaxWidth(),
                     endless = true,
                     onSelectedDate = { date ->

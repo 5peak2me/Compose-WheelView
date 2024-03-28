@@ -118,12 +118,8 @@ enum class DateFormat {
 private fun LocalDate.calculateDayOfMonths(): List<Item> {
     val days = when (monthNumber) {
         2 -> if (isLeapYear) 29 else 28
-
-        1, 3, 5, 7, 8, 10, 12 -> 31
-
         4, 6, 9, 11 -> 30
-
-        else -> 0
+        else -> 31
     }
 
     return (1..days).mapIndexed { index, item ->

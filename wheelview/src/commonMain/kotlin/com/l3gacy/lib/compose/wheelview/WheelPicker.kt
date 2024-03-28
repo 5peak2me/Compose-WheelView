@@ -30,7 +30,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import kotlin.math.abs
@@ -55,16 +57,14 @@ fun WheelPicker(
     val rowCount = ((rowOffsetCount * 2) + 1)
     val startIndex = if (endless) initialIndex + (itemCount * 1000) - rowOffset else initialIndex
 
-    val height = remember { 210.dp } // 3 * 5 * 7
+    val height = (rowCount * 30).dp // Divisible by 3 / 5 / 7
+
+    val singleViewPortHeight = height / rowCount
+    val singleViewPortHeightToPx = singleViewPortHeight.toPx()
+
     val lazyListState = rememberLazyListState(startIndex)
     val flingBehavior = rememberSnapFlingBehavior(lazyListState)
     val isScrollInProgress = lazyListState.isScrollInProgress
-
-//    LaunchedEffect(key1 = itemCount) {
-//        coroutineScope.launch {
-//            lazyListState.scrollToItem(startIndex)
-//        }
-//    }
 
     LaunchedEffect(isScrollInProgress) {
         if (!isScrollInProgress) {
@@ -107,7 +107,6 @@ fun WheelPicker(
 //                border = selectorProperties.border().value
 //            ) {}
 //        }
-
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = lazyListState,
@@ -116,13 +115,14 @@ fun WheelPicker(
             items(if (endless) Int.MAX_VALUE else count) { index ->
                 val (newAlpha, newRotationX) = calculateAnimatedAlphaAndRotationX(
                     lazyListState = lazyListState,
+                    singleViewPortHeight = singleViewPortHeightToPx,
                     index = index,
                     rowCount = rowCount
                 )
 
                 Box(
                     modifier = Modifier
-                        .height(height / rowCount)
+                        .height(singleViewPortHeight)
                         .fillMaxWidth()
                         .alpha(newAlpha)
                         .graphicsLayer {
@@ -156,16 +156,17 @@ private fun calculateSnappedItemIndex(lazyListState: LazyListState): Int {
 @Composable
 private fun calculateAnimatedAlphaAndRotationX(
     lazyListState: LazyListState,
+    singleViewPortHeight: Float,
     index: Int,
     rowCount: Int
 ): Pair<Float, Float> {
 
-    val layoutInfo = remember { derivedStateOf { lazyListState.layoutInfo } }.value
-    val viewPortHeight = layoutInfo.viewportSize.height.toFloat()
-    val singleViewPortHeight = viewPortHeight / rowCount
+//    val layoutInfo = remember { derivedStateOf { lazyListState.layoutInfo } }.value
+//    val viewPortHeight = layoutInfo.viewportSize.height.toFloat()
+//    val singleViewPortHeight = viewPortHeight / rowCount
 
     val centerIndex =
-        remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }.value + rowCount / 2
+        remember { derivedStateOf { lazyListState.firstVisibleItemIndex + rowCount / 2 } }.value
     val centerIndexOffset =
         remember { derivedStateOf { lazyListState.firstVisibleItemScrollOffset } }.value
 
@@ -176,9 +177,9 @@ private fun calculateAnimatedAlphaAndRotationX(
     val distanceToIndexSnapAbs = abs(distanceToIndexSnap)
 
     val animatedAlpha = if (distanceToIndexSnapAbs in 0..singleViewPortHeight.toInt()) {
-        1.2f - (distanceToIndexSnapAbs / singleViewPortHeight)
+        1.4f - (distanceToIndexSnapAbs / singleViewPortHeight)
     } else {
-        0.2f
+        0.4f
     }
 
     val animatedRotationX =
@@ -186,6 +187,9 @@ private fun calculateAnimatedAlphaAndRotationX(
 
     return animatedAlpha to animatedRotationX
 }
+
+@Composable
+private fun Dp.toPx() = with(LocalDensity.current) { this@toPx.toPx() }
 
 object WheelPickerDefaults {
     @Composable
