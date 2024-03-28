@@ -118,7 +118,7 @@ fun App() {
                     maxDate = LocalDate(2024, 7, 29),
                     onSelectedDate = { date ->
                         selectedDate = date.toString()
-//                        println(selectedDate)
+                        println(selectedDate)
                     }
                 )
                 Text(text = selectedDate)

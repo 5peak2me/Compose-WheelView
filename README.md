@@ -1,6 +1,6 @@
-| Android                                | iOS                     | Web | Desktop                                |
-|----------------------------------------|-------------------------|-----|----------------------------------------|
-| ![Android.png](screenshot/android.png) | ![](screenshot/iOS.png) |     | ![desktop.png](screenshot/desktop.png) |
+| Android                            | iOS                        | Web | Desktop                            |
+|------------------------------------|----------------------------|-----|------------------------------------|
+| ![Android](screenshot/android.png) | ![iOS](screenshot/iOS.png) |     | ![Desktop](screenshot/desktop.png) |
 
 This is a Kotlin Multiplatform project targeting Android, iOS, Web, Desktop.
 
