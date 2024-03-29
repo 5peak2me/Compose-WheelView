@@ -77,14 +77,16 @@ fun WheelDatePicker(
                     }
                     'M' -> {
                         // Month
-                        WheelTextPicker(
-                            modifier = Modifier.weight(1F),
-                            endless = endless,
-                            texts = months.map { it.text },
-                            initialIndex = months.find { it.value == snappedDate.monthNumber }?.index ?: 0
-                        ) { index ->
-                            snappedDate = snappedDate.withMonth(months[index].value)
-                            return@WheelTextPicker months.find { it.value == snappedDate.monthNumber }?.index
+                        key(months) {
+                            WheelTextPicker(
+                                modifier = Modifier.weight(1F),
+                                endless = endless,
+                                texts = months.map { it.text },
+                                initialIndex = months.find { it.value == snappedDate.monthNumber }?.index ?: 0
+                            ) { index ->
+                                snappedDate = snappedDate.withMonth(months[index].value)
+                                return@WheelTextPicker months.find { it.value == snappedDate.monthNumber }?.index
+                            }
                         }
                     }
                     'y' -> {
