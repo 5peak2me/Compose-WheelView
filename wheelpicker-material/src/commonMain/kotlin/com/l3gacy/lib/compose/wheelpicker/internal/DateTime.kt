@@ -41,8 +41,8 @@ internal val LocalDate.isLeapYear: Boolean
 /**
  * The epoch year {@code LocalDate}, '1970-01-01'.
  */
-internal val LocalDate.Companion.EPOCH: LocalDate
-    get() = LocalDate(1970, 1, 1)
+internal val LocalDate.Companion.MIN: LocalDate
+    get() = LocalDate(1900, 1, 1)
 
 /**
  * The maximum supported [LocalDate], '2099-12-31'.
@@ -244,8 +244,8 @@ internal fun LocalDateTime.Companion.now(timeZone: TimeZone = TimeZone.currentSy
     return Clock.System.now().toLocalDateTime(timeZone)
 }
 
-internal val LocalDateTime.Companion.EPOCH: LocalDateTime
-    get() = LocalDateTime(LocalDate.EPOCH, LocalTime.MIN)
+internal val LocalDateTime.Companion.MIN: LocalDateTime
+    get() = LocalDateTime(LocalDate.MIN, LocalTime.MIN)
 
 internal val LocalDateTime.Companion.MAX: LocalDateTime
     get() = LocalDateTime(LocalDate.MAX, LocalTime.MAX)

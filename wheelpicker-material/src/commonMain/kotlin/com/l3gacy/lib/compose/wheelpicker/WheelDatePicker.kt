@@ -11,7 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.l3gacy.lib.compose.wheelpicker.internal.EPOCH
+import com.l3gacy.lib.compose.wheelpicker.internal.MIN
 import com.l3gacy.lib.compose.wheelpicker.internal.MAX
 import com.l3gacy.lib.compose.wheelpicker.internal.PickerItem
 import com.l3gacy.lib.compose.wheelpicker.internal.capitalize
@@ -34,7 +34,7 @@ import kotlinx.datetime.Month
 fun WheelDatePicker(
     modifier: Modifier = Modifier,
     initialDate: LocalDate = LocalDate.now(),
-    minDate: LocalDate = LocalDate.EPOCH,
+    minDate: LocalDate = LocalDate.MIN,
     maxDate: LocalDate = LocalDate.MAX,
     endless: Boolean = true,
     onSelectedDate: (LocalDate) -> Unit,
