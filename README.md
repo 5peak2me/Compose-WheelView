@@ -4,8 +4,8 @@
 
 This is a Kotlin Multiplatform project targeting Android, iOS, Web, Desktop.
 
-| Platform      | Supported         |
-|---------------|-------------------|
+| Platform      | Supported        |
+|---------------|------------------|
 | Android       | ✅                |
 | iOS           | ✅                |
 | Desktop (JVM) | ✅                |

@@ -57,7 +57,7 @@ fun WheelView(
     val rowCount = ((rowOffsetCount * 2) + 1)
     val startIndex = if (endless) initialIndex + (itemCount * 1000) - rowOffset else initialIndex
 
-    val height = (rowCount * 30).dp // Divisible by 3 / 5 / 7
+    val height = 32.dp * rowCount // Divisible by 3 / 5 / 7
 
     val singleViewPortHeight = height / rowCount
     val singleViewPortHeightToPx = singleViewPortHeight.toPx()
@@ -140,7 +140,7 @@ fun WheelView(
             }
         }
 
-        SelectorView(offset = rowOffset)
+//        SelectorView(offset = rowOffset)
 
     }
 }

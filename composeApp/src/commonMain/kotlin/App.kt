@@ -94,7 +94,7 @@ fun App() {
                     state = rememberTimePickerState(endless = false),
 //                    initialTime = LocalTime(15, 23, 33),
                     minTime = LocalTime(14, 22, 33),
-                    maxTime = LocalTime(16, 24, 38),
+//                    maxTime = LocalTime(16, 24, 38),
                     onSelectedTime = { time ->
                         selectedTime = time.toString()
                         println(selectedTime)

@@ -17,6 +17,7 @@ fun WheelTextPicker(
     initialIndex: Int = 0,
     texts: List<String>,
     endless: Boolean = true,
+    rowOffset: Int = 3,
     style: TextStyle = MaterialTheme.typography.titleLarge,
     color: Color = LocalContentColor.current,
     selectorProperties: SelectorProperties = WheelPickerDefaults.selectorProperties(),
@@ -26,6 +27,7 @@ fun WheelTextPicker(
         modifier = modifier,
         initialIndex = initialIndex,
         itemCount = texts.size,
+        rowOffset = rowOffset,
         endless = endless,
         selectorProperties = selectorProperties,
         onItemSelected = onScrollFinished
