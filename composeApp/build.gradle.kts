@@ -62,8 +62,8 @@ kotlin {
             implementation(compose.components.resources)
             implementation(libs.kotlinx.datetime)
             implementation(project(":wheelview"))
-            implementation(project(":wheelpicker-material"))
-//            implementation(project(":wheelpicker-material3"))
+//            implementation(project(":wheelpicker-material"))
+            implementation(project(":wheelpicker-material3"))
         }
         commonTest.dependencies {
             implementation(kotlin("test"))

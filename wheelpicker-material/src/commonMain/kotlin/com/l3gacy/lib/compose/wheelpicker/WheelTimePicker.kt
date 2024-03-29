@@ -3,16 +3,17 @@ package com.l3gacy.lib.compose.wheelpicker
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.l3gacy.lib.compose.wheelpicker.internal.DateTime
 import com.l3gacy.lib.compose.wheelpicker.internal.MAX
 import com.l3gacy.lib.compose.wheelpicker.internal.MIN
-import com.l3gacy.lib.compose.wheelpicker.internal.isAfter
-import com.l3gacy.lib.compose.wheelpicker.internal.isBefore
 import com.l3gacy.lib.compose.wheelpicker.internal.now
 import com.l3gacy.lib.compose.wheelpicker.internal.padding
 import com.l3gacy.lib.compose.wheelpicker.internal.withHour
@@ -31,225 +32,101 @@ fun WheelTimePicker(
     onSelectedTime: (LocalTime) -> Unit,
 ) {
 
-    var snappedTime by remember { mutableStateOf(LocalTime(initialTime.hour, initialTime.minute)) }
-    val hours = (0..23).map {
-        Hour(
-            text = it.toString().padding,
-            value = it,
-            index = it
-        )
-    }
-    val amPmHours = (1..12).map {
-        AmPmHour(
-            text = it.toString(),
-            value = it,
-            index = it - 1
-        )
-    }
+    var snappedTime by remember { mutableStateOf(initialTime) }
 
-    val minutes = (0..59).map {
-        Minute(
-            text = it.toString().padding,
-            value = it,
-            index = it
-        )
-    }
+    val hours = snappedTime.calculateHoursOfTime(minTime, maxTime)
 
-    val amPms = listOf(
-        AmPm(
-            text = "AM",
-            value = AmPmValue.AM,
-            index = 0
-        ),
-        AmPm(
-            text = "PM",
-            value = AmPmValue.PM,
-            index = 1
-        )
-    )
+    val minutes = snappedTime.calculateMinutesOfTime(minTime, maxTime)
 
-    var snappedAmPm by remember {
-        mutableStateOf(
-            amPms.find { it.value == amPmValueFromTime(initialTime) } ?: amPms[0]
-        )
+    val seconds = snappedTime.calculateSecondsOfTime(minTime, maxTime)
+
+    LaunchedEffect(snappedTime) {
+        onSelectedTime(snappedTime)
     }
 
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
         Row {
-            if (timeFormat == TimeFormat.HOUR_12) {
-                WheelTextPicker(
-                    modifier = Modifier.weight(1F),
-                    endless = endless,
-                    texts = amPms.map { it.text },
-                    initialIndex = amPms.find { it.value == amPmValueFromTime(initialTime) }?.index ?: 0
-                ) { snappedIndex ->
-                    val newAmPm = amPms.find {
-                        if (snappedIndex == 2) {
-                            it.index == 1
-                        } else {
-                            it.index == snappedIndex
-                        }
-                    }
-
-                    newAmPm?.let {
-                        snappedAmPm = newAmPm
-                    }
-
-                    val newMinute = minutes.find { it.value == snappedTime.minute }?.value
-
-                    val newHour = amPmHourToHour24(
-                        amPmHours.find { it.value == localTimeToAmPmHour(snappedTime) }?.value ?: 0,
-                        snappedTime.minute,
-                        snappedAmPm.value
-                    )
-
-                    newMinute?.let {
-                        val newTime = snappedTime.withMinute(newMinute).withHour(newHour)
-
-                        if (!newTime.isBefore(minTime) && !newTime.isAfter(maxTime)) {
-                            snappedTime = newTime
-                        }
-
-                        val newIndex = minutes.find { it.value == snappedTime.hour }?.index
-
-                        newIndex?.let {
-                            onSelectedTime.invoke(snappedTime)
-                        }
-                    }
-
-                    return@WheelTextPicker snappedIndex
-                }
-            }
-
             // Hour
             WheelTextPicker(
                 modifier = Modifier.weight(1F),
                 endless = endless,
-                texts = if (timeFormat == TimeFormat.HOUR_24) hours.map { it.text } else amPmHours.map { it.text },
-                initialIndex = if (timeFormat == TimeFormat.HOUR_24) {
-                    hours.find { it.value == initialTime.hour }?.index ?: 0
-                } else amPmHours.find { it.value == localTimeToAmPmHour(initialTime) }?.index ?: 0
-            ) { snappedIndex ->
-                val newHour = if (timeFormat == TimeFormat.HOUR_24) {
-                    hours.find { it.index == snappedIndex }?.value
-                } else {
-                    amPmHourToHour24(
-                        amPmHours.find { it.index == snappedIndex }?.value ?: 0,
-                        snappedTime.minute,
-                        snappedAmPm.value
-                    )
-                }
-                newHour?.let {
-                    val newTime = snappedTime.withHour(newHour)
-
-                    if (!newTime.isBefore(minTime) && !newTime.isAfter(maxTime)) {
-                        snappedTime = newTime
-                    }
-
-                    val newIndex = if (timeFormat == TimeFormat.HOUR_24) {
-                        hours.find { it.value == snappedTime.hour }?.index
-                    } else {
-                        amPmHours.find { it.value == localTimeToAmPmHour(snappedTime) }?.index
-                    }
-
-                    newIndex?.let {
-                        onSelectedTime.invoke(snappedTime.withHour(it))
-                    }
-                }
-                return@WheelTextPicker if (timeFormat == TimeFormat.HOUR_24) {
-                    hours.find { it.value == snappedTime.hour }?.index
-                } else {
-                    amPmHours.find { it.value == localTimeToAmPmHour(snappedTime) }?.index
-                }
+                texts = hours.map { it.text },
+                initialIndex = hours.find { it.value == snappedTime.hour }?.index ?: 0
+            ) { index ->
+                snappedTime = snappedTime.withHour(hours[index].value)
+                return@WheelTextPicker hours.find { it.value == snappedTime.hour }?.index
             }
 
             // Minute
-            WheelTextPicker(
-                modifier = Modifier.weight(1F),
-                endless = endless,
-                texts = minutes.map { it.text },
-                initialIndex = minutes.find { it.value == initialTime.minute }?.index ?: 0
-            ) { snappedIndex ->
-                val newMinute = minutes.find { it.index == snappedIndex }?.value
-
-                val newHour = if (timeFormat == TimeFormat.HOUR_24) {
-                    hours.find { it.value == snappedTime.hour }?.value
-                } else {
-                    amPmHourToHour24(
-                        amPmHours.find { it.value == localTimeToAmPmHour(snappedTime) }?.value ?: 0,
-                        snappedTime.minute,
-                        snappedAmPm.value
-                    )
+            key(minutes) {
+                WheelTextPicker(
+                    modifier = Modifier.weight(1F),
+                    endless = endless,
+                    texts = minutes.map { it.text },
+                    initialIndex = minutes.find { it.value == snappedTime.minute }?.index ?: 0
+                ) { index ->
+                    snappedTime = snappedTime.withMinute(minutes[index].value)
+                    return@WheelTextPicker minutes.find { it.value == snappedTime.minute }?.index
                 }
-
-                newMinute?.let {
-                    newHour?.let {
-                        val newTime = snappedTime.withMinute(newMinute).withHour(newHour)
-
-                        if (!newTime.isBefore(minTime) && !newTime.isAfter(maxTime)) {
-                            snappedTime = newTime
-                        }
-
-                        val newIndex = minutes.find { it.value == snappedTime.minute }?.index
-
-                        newIndex?.let {
-                            onSelectedTime.invoke(snappedTime.withMinute(it))
-                        }
-                    }
-                }
-
-                return@WheelTextPicker minutes.find { it.value == snappedTime.minute }?.index
             }
 
             // Second
-            WheelTextPicker(
-                modifier = Modifier.weight(1F),
-                endless = endless,
-                texts = minutes.map { it.text },
-                initialIndex = minutes.find { it.value == initialTime.second }?.index ?: 0,
-            ) { snappedIndex ->
-
-                val newSecond = minutes.find { it.index == snappedIndex }?.value
-
-                newSecond?.let {
-                    val newTime = snappedTime.withSecond(newSecond)
-
-                    if (!newTime.isBefore(minTime) && !newTime.isAfter(maxTime)) {
-                        snappedTime = newTime
-                    }
-
-                    val newIndex = minutes.find { it.value == snappedTime.second }?.index
-
-                    newIndex?.let {
-                        onSelectedTime.invoke(snappedTime.withSecond(it))
-                    }
+            key(seconds) {
+                WheelTextPicker(
+                    modifier = Modifier.weight(1F),
+                    endless = endless,
+                    texts = seconds.map { it.text },
+                    initialIndex = seconds.find { it.value == snappedTime.second }?.index ?: 0,
+                ) { index ->
+                    snappedTime = snappedTime.withSecond(seconds[index].value)
+                    return@WheelTextPicker seconds.find { it.value == snappedTime.second }?.index
                 }
-
-
-                return@WheelTextPicker minutes.find { it.value == snappedTime.second }?.index
             }
         }
 
     }
 }
 
-private data class Hour(
-    val text: String,
-    val value: Int,
-    val index: Int
-)
+private fun LocalTime.calculateHoursOfTime(minTime: LocalTime, maxTime: LocalTime): List<DateTime> =
+    (minTime.hour..maxTime.hour).mapIndexed { index, item ->
+        DateTime(
+            text = item.toString().padding,
+            value = item,
+            index = index
+        )
+    }
 
-private data class Minute(
-    val text: String,
-    val value: Int,
-    val index: Int
-)
+private fun LocalTime.calculateMinutesOfTime(
+    minTime: LocalTime,
+    maxTime: LocalTime
+): List<DateTime> =
+    when (hour) {
+        minTime.hour -> minTime.minute..59
+        maxTime.hour -> 0..maxTime.minute
+        else -> 0..59
+    }.mapIndexed { index, item ->
+        DateTime(
+            text = item.toString().padding,
+            value = item,
+            index = index
+        )
+    }
 
-private data class AmPmHour(
-    val text: String,
-    val value: Int,
-    val index: Int
-)
+private fun LocalTime.calculateSecondsOfTime(
+    minTime: LocalTime,
+    maxTime: LocalTime
+): List<DateTime> =
+    when {
+        hour == minTime.hour && minute == minTime.minute -> minTime.second..59
+        hour == maxTime.hour && minute == maxTime.minute -> 0..maxTime.second
+        else -> 0..59
+    }.mapIndexed { index, item ->
+        DateTime(
+            text = item.toString().padding,
+            value = item,
+            index = index
+        )
+    }
 
 internal fun localTimeToAmPmHour(localTime: LocalTime): Int {
 
