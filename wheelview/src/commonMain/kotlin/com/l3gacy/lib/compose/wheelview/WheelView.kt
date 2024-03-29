@@ -39,14 +39,14 @@ import kotlin.math.abs
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun WheelPicker(
+fun WheelView(
     modifier: Modifier = Modifier,
     initialIndex: Int = 0,
     itemCount: Int,
     rowOffset: Int = 3,
     endless: Boolean = true,
     selectorProperties: SelectorProperties = WheelPickerDefaults.selectorProperties(),
-    onItemSelected: (index: Int) -> Unit = {},
+    onItemSelected: (index: Int) -> Unit = { },
     content: @Composable LazyItemScope.(index: Int) -> Unit,
 ) {
 
@@ -66,6 +66,12 @@ fun WheelPicker(
     val flingBehavior = rememberSnapFlingBehavior(lazyListState)
     val isScrollInProgress = lazyListState.isScrollInProgress
 
+    LaunchedEffect(itemCount) {
+        coroutineScope.launch {
+            lazyListState.scrollToItem(startIndex)
+        }
+    }
+
     LaunchedEffect(isScrollInProgress) {
         if (!isScrollInProgress) {
             val index = calculateSnappedItemIndex(lazyListState)
@@ -76,11 +82,6 @@ fun WheelPicker(
             }
 
             onItemSelected(snappedIndex)
-            if (lazyListState.firstVisibleItemScrollOffset != 0) {
-                coroutineScope.launch {
-                    lazyListState.animateScrollToItem(snappedIndex)
-                }
-            }
         }
     }
 
@@ -189,7 +190,7 @@ private fun calculateAnimatedAlphaAndRotationX(
 }
 
 @Composable
-private inline fun Dp.toPx() = with(LocalDensity.current) { this@toPx.toPx() }
+private fun Dp.toPx() = with(LocalDensity.current) { this@toPx.toPx() }
 
 object WheelPickerDefaults {
     @Composable

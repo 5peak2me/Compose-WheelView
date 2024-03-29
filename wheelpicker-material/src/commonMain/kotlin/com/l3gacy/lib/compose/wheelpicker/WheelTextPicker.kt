@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import com.l3gacy.lib.compose.wheelview.SelectorProperties
-import com.l3gacy.lib.compose.wheelview.WheelPicker
+import com.l3gacy.lib.compose.wheelview.WheelView
 import com.l3gacy.lib.compose.wheelview.WheelPickerDefaults
 
 @Composable
@@ -20,9 +20,9 @@ fun WheelTextPicker(
     style: TextStyle = MaterialTheme.typography.h6,
     color: Color = LocalContentColor.current,
     selectorProperties: SelectorProperties = WheelPickerDefaults.selectorProperties(),
-    onScrollFinished: (snappedIndex: Int) -> Int? = { null },
+    onScrollFinished: (snappedIndex: Int) -> Unit = { },
 ) {
-    WheelPicker(
+    WheelView(
         modifier = modifier,
         initialIndex = initialIndex,
         itemCount = texts.size,

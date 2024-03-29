@@ -68,7 +68,6 @@ fun WheelTimePicker(
                     texts = amPm.map { it.text },
                     initialIndex = hours.find { it.value == snappedTime.hour }?.index ?: 0
                 ) { index ->
-                    return@WheelTextPicker hours.find { it.value == snappedTime.hour }?.index
                 }
             }
             // Hour
@@ -79,7 +78,6 @@ fun WheelTimePicker(
                 initialIndex = hours.find { it.value == snappedTime.hour }?.index ?: 0
             ) { index ->
                 snappedTime = snappedTime.withHour(hours[index].value)
-                return@WheelTextPicker hours.find { it.value == snappedTime.hour }?.index
             }
 
             // Minute
@@ -91,7 +89,6 @@ fun WheelTimePicker(
                     initialIndex = minutes.find { it.value == snappedTime.minute }?.index ?: 0
                 ) { index ->
                     snappedTime = snappedTime.withMinute(minutes[index].value)
-                    return@WheelTextPicker minutes.find { it.value == snappedTime.minute }?.index
                 }
             }
 
@@ -104,7 +101,6 @@ fun WheelTimePicker(
                     initialIndex = seconds.find { it.value == snappedTime.second }?.index ?: 0,
                 ) { index ->
                     snappedTime = snappedTime.withSecond(seconds[index].value)
-                    return@WheelTextPicker seconds.find { it.value == snappedTime.second }?.index
                 }
             }
         }

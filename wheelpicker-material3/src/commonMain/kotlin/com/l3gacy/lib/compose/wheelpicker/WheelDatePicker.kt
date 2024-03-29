@@ -71,7 +71,6 @@ fun WheelDatePicker(
                                 initialIndex = dayOfMonths.find { it.value == snappedDate.dayOfMonth }?.index ?: 0
                             ) { index ->
                                 snappedDate = snappedDate.withDayOfMonth(dayOfMonths[index].value)
-                                return@WheelTextPicker dayOfMonths.find { it.value == snappedDate.dayOfMonth }?.index
                             }
                         }
                     }
@@ -85,7 +84,6 @@ fun WheelDatePicker(
                                 initialIndex = months.find { it.value == snappedDate.monthNumber }?.index ?: 0
                             ) { index ->
                                 snappedDate = snappedDate.withMonth(months[index].value)
-                                return@WheelTextPicker months.find { it.value == snappedDate.monthNumber }?.index
                             }
                         }
                     }
@@ -98,7 +96,6 @@ fun WheelDatePicker(
                             initialIndex = years.find { it.value == snappedDate.year }?.index ?: 0
                         ) { index ->
                             snappedDate = snappedDate.withYear(years[index].value)
-                            return@WheelTextPicker years.find { it.value == snappedDate.year }?.index
                         }
                     }
                 }
