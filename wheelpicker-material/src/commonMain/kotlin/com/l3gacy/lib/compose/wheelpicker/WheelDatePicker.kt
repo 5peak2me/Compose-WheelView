@@ -13,7 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.l3gacy.lib.compose.wheelpicker.internal.MIN
 import com.l3gacy.lib.compose.wheelpicker.internal.MAX
-import com.l3gacy.lib.compose.wheelpicker.internal.PickerItem
+import com.l3gacy.lib.compose.wheelpicker.internal.DateTime
 import com.l3gacy.lib.compose.wheelpicker.internal.capitalize
 import com.l3gacy.lib.compose.wheelpicker.internal.lengthOfMonth
 import com.l3gacy.lib.compose.wheelpicker.internal.now
@@ -46,7 +46,7 @@ fun WheelDatePicker(
     val months = snappedDate.calculateMonthOfYear(minDate, maxDate)
 
     val years = (minDate.year..maxDate.year).mapIndexed { index, item ->
-        PickerItem(
+        DateTime(
             text = item.toString(),
             value = item,
             index = index
@@ -97,14 +97,14 @@ fun WheelDatePicker(
     }
 }
 
-private fun LocalDate.calculateDayOfMonth(minDate: LocalDate, maxDate: LocalDate): List<PickerItem> {
+private fun LocalDate.calculateDayOfMonth(minDate: LocalDate, maxDate: LocalDate): List<DateTime> {
     val range = when {
         year == minDate.year && month == minDate.month -> minDate.dayOfMonth..lengthOfMonth()
         year == maxDate.year && month == maxDate.month -> 1..maxDate.dayOfMonth
         else -> 1..lengthOfMonth()
     }
     return range.mapIndexed { index, item ->
-        PickerItem(
+        DateTime(
             text = item.toString(),
             value = item,
             index = index
@@ -112,14 +112,14 @@ private fun LocalDate.calculateDayOfMonth(minDate: LocalDate, maxDate: LocalDate
     }
 }
 
-private fun LocalDate.calculateMonthOfYear(minDate: LocalDate, maxDate: LocalDate): List<PickerItem> {
+private fun LocalDate.calculateMonthOfYear(minDate: LocalDate, maxDate: LocalDate): List<DateTime> {
     val range = when (year) {
         minDate.year -> minDate.monthNumber..12
         maxDate.year -> 1..maxDate.monthNumber
         else -> 1..12
     }
     return range.mapIndexed { index, item ->
-        PickerItem(
+        DateTime(
             text = Month(item).name.lowercase().capitalize,
             value = item,
             index = index

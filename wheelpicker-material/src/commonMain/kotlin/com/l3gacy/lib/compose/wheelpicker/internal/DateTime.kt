@@ -11,6 +11,12 @@ import kotlinx.datetime.toLocalDateTime
 import kotlin.math.min
 import kotlin.time.DurationUnit
 
+internal data class DateTime(
+    val text: String,
+    val value: Int,
+    val index: Int,
+)
+
 // <editor-fold desc="String Extension" defaultstate="collapsed">
 internal inline val String.capitalize: String
     get() = replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
