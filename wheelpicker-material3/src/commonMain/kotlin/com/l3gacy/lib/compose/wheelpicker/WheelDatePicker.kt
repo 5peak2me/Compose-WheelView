@@ -59,8 +59,8 @@ fun WheelDatePicker(
 
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
         Row {
-            getDateFormatOrder().forEach {
-                when (it) {
+            getDateFormatOrder().forEach { char ->
+                when (char) {
                     'd' -> {
                         // DayOfMonth
                         key(dayOfMonths) {
