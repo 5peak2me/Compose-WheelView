@@ -59,39 +59,47 @@ fun WheelDatePicker(
 
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
         Row {
-            // DayOfMonth
-            key(dayOfMonths) {
-                WheelTextPicker(
-                    modifier = Modifier.weight(1F),
-                    endless = endless,
-                    texts = dayOfMonths.map { it.text },
-                    initialIndex = dayOfMonths.find { it.value == snappedDate.dayOfMonth }?.index ?: 0
-                ) { index ->
-                    snappedDate = snappedDate.withDayOfMonth(dayOfMonths[index].value)
-                    return@WheelTextPicker dayOfMonths.find { it.value == snappedDate.dayOfMonth }?.index
+            getDateFormatOrder().forEach {
+                when (it) {
+                    'd' -> {
+                        // DayOfMonth
+                        key(dayOfMonths) {
+                            WheelTextPicker(
+                                modifier = Modifier.weight(1F),
+                                endless = endless,
+                                texts = dayOfMonths.map { it.text },
+                                initialIndex = dayOfMonths.find { it.value == snappedDate.dayOfMonth }?.index ?: 0
+                            ) { index ->
+                                snappedDate = snappedDate.withDayOfMonth(dayOfMonths[index].value)
+                                return@WheelTextPicker dayOfMonths.find { it.value == snappedDate.dayOfMonth }?.index
+                            }
+                        }
+                    }
+                    'M' -> {
+                        // Month
+                        WheelTextPicker(
+                            modifier = Modifier.weight(1F),
+                            endless = endless,
+                            texts = months.map { it.text },
+                            initialIndex = months.find { it.value == snappedDate.monthNumber }?.index ?: 0
+                        ) { index ->
+                            snappedDate = snappedDate.withMonth(months[index].value)
+                            return@WheelTextPicker months.find { it.value == snappedDate.monthNumber }?.index
+                        }
+                    }
+                    'y' -> {
+                        // Year
+                        WheelTextPicker(
+                            modifier = Modifier.weight(1F),
+                            endless = endless,
+                            texts = years.map { it.text },
+                            initialIndex = years.find { it.value == snappedDate.year }?.index ?: 0
+                        ) { index ->
+                            snappedDate = snappedDate.withYear(years[index].value)
+                            return@WheelTextPicker years.find { it.value == snappedDate.year }?.index
+                        }
+                    }
                 }
-            }
-
-            // Month
-            WheelTextPicker(
-                modifier = Modifier.weight(1F),
-                endless = endless,
-                texts = months.map { it.text },
-                initialIndex = months.find { it.value == snappedDate.monthNumber }?.index ?: 0
-            ) { index ->
-                snappedDate = snappedDate.withMonth(months[index].value)
-                return@WheelTextPicker months.find { it.value == snappedDate.monthNumber }?.index
-            }
-
-            // Year
-            WheelTextPicker(
-                modifier = Modifier.weight(1F),
-                endless = endless,
-                texts = years.map { it.text },
-                initialIndex = years.find { it.value == snappedDate.year }?.index ?: 0
-            ) { index ->
-                snappedDate = snappedDate.withYear(years[index].value)
-                return@WheelTextPicker years.find { it.value == snappedDate.year }?.index
             }
         }
     }

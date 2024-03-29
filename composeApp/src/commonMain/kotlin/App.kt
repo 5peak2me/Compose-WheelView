@@ -12,8 +12,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.l3gacy.lib.compose.wheelpicker.WheelDatePicker
 import com.l3gacy.lib.compose.wheelpicker.WheelTimePicker
 import com.l3gacy.lib.compose.wheelpicker.rememberTimePickerState
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 
 @Composable
@@ -103,24 +105,24 @@ fun App() {
 
             var selectedDate by remember { mutableStateOf("") }
 
-//            Column(
-//                modifier = Modifier.weight(1f),
-//                horizontalAlignment = Alignment.CenterHorizontally
-//            ) {
-//                WheelDatePicker(
-//                    modifier = Modifier
-//                        .background(Color.LightGray)
-//                        .fillMaxWidth(),
-//                    endless = false,
-//                    minDate = LocalDate(2021, 3, 9),
-//                    maxDate = LocalDate(2024, 7, 29),
-//                    onSelectedDate = { date ->
-//                        selectedDate = date.toString()
-////                        println(selectedDate)
-//                    }
-//                )
-//                Text(text = selectedDate)
-//            }
+            Column(
+                modifier = Modifier.weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                WheelDatePicker(
+                    modifier = Modifier
+                        .background(Color.LightGray)
+                        .fillMaxWidth(),
+                    endless = false,
+                    minDate = LocalDate(2021, 3, 9),
+                    maxDate = LocalDate(2024, 7, 29),
+                    onSelectedDate = { date ->
+                        selectedDate = date.toString()
+//                        println(selectedDate)
+                    }
+                )
+                Text(text = selectedDate)
+            }
 
 //            Button(onClick = { showContent = !showContent }) {
 //                Text("Click me!")
