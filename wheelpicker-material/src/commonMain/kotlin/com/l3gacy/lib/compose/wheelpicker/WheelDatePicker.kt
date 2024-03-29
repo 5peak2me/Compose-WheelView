@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.l3gacy.lib.compose.wheelpicker.internal.EPOCH
 import com.l3gacy.lib.compose.wheelpicker.internal.MAX
+import com.l3gacy.lib.compose.wheelpicker.internal.PickerItem
 import com.l3gacy.lib.compose.wheelpicker.internal.capitalize
 import com.l3gacy.lib.compose.wheelpicker.internal.lengthOfMonth
 import com.l3gacy.lib.compose.wheelpicker.internal.now
@@ -35,30 +36,31 @@ fun WheelDatePicker(
     initialDate: LocalDate = LocalDate.now(),
     minDate: LocalDate = LocalDate.EPOCH,
     maxDate: LocalDate = LocalDate.MAX,
-    dateFormat: DateFormat = DateFormat.DAY_MONTH_YEAR,
     endless: Boolean = false,
     onSelectedDate: (LocalDate) -> Unit,
 ) {
     var snappedDate by remember { mutableStateOf(initialDate) }
 
-    val dayOfMonths = (1..snappedDate.lengthOfMonth()).mapIndexed { index, item ->
-        Item(
-            text = item.toString(),
-            value = item,
-            index = index
-        )
-    }
+//    val dayOfMonths = (1..snappedDate.lengthOfMonth()).mapIndexed { index, item ->
+//        Item(
+//            text = item.toString(),
+//            value = item,
+//            index = index
+//        )
+//    }
+    val dayOfMonths = snappedDate.calculateDayOfMonth(minDate, maxDate)
 
-    val months = (1..12).mapIndexed { index, item ->
-        Item(
-            text = Month(item).name.lowercase().capitalize,
-            value = item,
-            index = index
-        )
-    }
+//    val months = (1..12).mapIndexed { index, item ->
+//        Item(
+//            text = Month(item).name.lowercase().capitalize,
+//            value = item,
+//            index = index
+//        )
+//    }
+    val months = snappedDate.calculateMonthOfYear(minDate, maxDate)
 
     val years = (minDate.year..maxDate.year).mapIndexed { index, item ->
-        Item(
+        PickerItem(
             text = item.toString(),
             value = item,
             index = index
@@ -109,14 +111,38 @@ fun WheelDatePicker(
     }
 }
 
-private data class Item(
-    val text: String,
-    val value: Int,
-    val index: Int,
-)
+enum class DateStyle {
+    YMD,
+    YM,
+    MD,
+}
 
-enum class DateFormat {
-    DAY_MONTH_YEAR,
-    MONTH_DAY_YEAR,
-    YEAR_MONTH_DAY,
+private fun LocalDate.calculateDayOfMonth(minDate: LocalDate, maxDate: LocalDate): List<PickerItem> {
+    val range = when {
+        year == minDate.year && month == minDate.month -> minDate.dayOfMonth..lengthOfMonth()
+        year == maxDate.year && month == maxDate.month -> 1..maxDate.dayOfMonth
+        else -> 1..lengthOfMonth()
+    }
+    return range.mapIndexed { index, item ->
+        PickerItem(
+            text = item.toString(),
+            value = item,
+            index = index
+        )
+    }
+}
+
+private fun LocalDate.calculateMonthOfYear(minDate: LocalDate, maxDate: LocalDate): List<PickerItem> {
+    val range = when (year) {
+        minDate.year -> minDate.monthNumber..12
+        maxDate.year -> 1..maxDate.monthNumber
+        else -> 1..12
+    }
+    return range.mapIndexed { index, item ->
+        PickerItem(
+            text = Month(item).name.lowercase().capitalize,
+            value = item,
+            index = index
+        )
+    }
 }

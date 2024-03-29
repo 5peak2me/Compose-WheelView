@@ -66,6 +66,12 @@ fun WheelPicker(
     val flingBehavior = rememberSnapFlingBehavior(lazyListState)
     val isScrollInProgress = lazyListState.isScrollInProgress
 
+    LaunchedEffect(itemCount) {
+        coroutineScope.launch {
+            lazyListState.scrollToItem(startIndex)
+        }
+    }
+
     LaunchedEffect(isScrollInProgress) {
         if (!isScrollInProgress) {
             val index = calculateSnappedItemIndex(lazyListState)
@@ -76,11 +82,6 @@ fun WheelPicker(
             }
 
             onItemSelected(snappedIndex)
-            if (lazyListState.firstVisibleItemScrollOffset != 0) {
-                coroutineScope.launch {
-                    lazyListState.animateScrollToItem(snappedIndex)
-                }
-            }
         }
     }
 
