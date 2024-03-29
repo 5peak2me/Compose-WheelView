@@ -36,27 +36,13 @@ fun WheelDatePicker(
     initialDate: LocalDate = LocalDate.now(),
     minDate: LocalDate = LocalDate.EPOCH,
     maxDate: LocalDate = LocalDate.MAX,
-    endless: Boolean = false,
+    endless: Boolean = true,
     onSelectedDate: (LocalDate) -> Unit,
 ) {
     var snappedDate by remember { mutableStateOf(initialDate) }
 
-//    val dayOfMonths = (1..snappedDate.lengthOfMonth()).mapIndexed { index, item ->
-//        Item(
-//            text = item.toString(),
-//            value = item,
-//            index = index
-//        )
-//    }
     val dayOfMonths = snappedDate.calculateDayOfMonth(minDate, maxDate)
 
-//    val months = (1..12).mapIndexed { index, item ->
-//        Item(
-//            text = Month(item).name.lowercase().capitalize,
-//            value = item,
-//            index = index
-//        )
-//    }
     val months = snappedDate.calculateMonthOfYear(minDate, maxDate)
 
     val years = (minDate.year..maxDate.year).mapIndexed { index, item ->
@@ -109,12 +95,6 @@ fun WheelDatePicker(
             }
         }
     }
-}
-
-enum class DateStyle {
-    YMD,
-    YM,
-    MD,
 }
 
 private fun LocalDate.calculateDayOfMonth(minDate: LocalDate, maxDate: LocalDate): List<PickerItem> {

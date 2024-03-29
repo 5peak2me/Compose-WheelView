@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.l3gacy.lib.compose.wheelpicker.WheelDatePicker
 import com.l3gacy.lib.compose.wheelpicker.WheelTimePicker
+import kotlinx.datetime.LocalDate
 
 @Composable
 fun App() {
@@ -107,7 +108,9 @@ fun App() {
                     modifier = Modifier
                         .background(Color.LightGray)
                         .fillMaxWidth(),
-                    endless = true,
+                    endless = false,
+                    minDate = LocalDate(2021, 3, 9),
+                    maxDate = LocalDate(2024, 7, 29),
                     onSelectedDate = { date ->
                         selectedDate = date.toString()
 //                        println(selectedDate)
