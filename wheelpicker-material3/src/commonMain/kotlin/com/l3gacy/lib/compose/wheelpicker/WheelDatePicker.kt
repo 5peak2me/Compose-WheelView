@@ -134,12 +134,11 @@ fun WheelDatePicker(
 }
 
 private fun LocalDate.calculateDayOfMonth(minDate: LocalDate, maxDate: LocalDate): List<DateTime> {
-    val range = when {
+    return when {
         year == minDate.year && month == minDate.month -> minDate.dayOfMonth..lengthOfMonth()
         year == maxDate.year && month == maxDate.month -> 1..maxDate.dayOfMonth
         else -> 1..lengthOfMonth()
-    }
-    return range.mapIndexed { index, item ->
+    }.mapIndexed { index, item ->
         DateTime(
             text = item.toString(),
             value = item,
@@ -149,12 +148,11 @@ private fun LocalDate.calculateDayOfMonth(minDate: LocalDate, maxDate: LocalDate
 }
 
 private fun LocalDate.calculateMonthOfYear(minDate: LocalDate, maxDate: LocalDate): List<DateTime> {
-    val range = when (year) {
+    return when (year) {
         minDate.year -> minDate.monthNumber..12
         maxDate.year -> 1..maxDate.monthNumber
         else -> 1..12
-    }
-    return range.mapIndexed { index, item ->
+    }.mapIndexed { index, item ->
         DateTime(
             text = Month(item).name.lowercase().capitalize,
             value = item,
