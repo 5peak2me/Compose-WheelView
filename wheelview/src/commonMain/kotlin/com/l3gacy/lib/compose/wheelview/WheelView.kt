@@ -26,8 +26,12 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.drawOutline
+import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalDensity
@@ -45,7 +49,6 @@ fun WheelView(
     itemCount: Int,
     rowOffset: Int = 3,
     endless: Boolean = true,
-    selectorProperties: SelectorProperties = WheelPickerDefaults.selectorProperties(),
     onItemSelected: (index: Int) -> Unit = { },
     content: @Composable LazyItemScope.(index: Int) -> Unit,
 ) {
@@ -99,17 +102,14 @@ fun WheelView(
             .fillMaxWidth(),
         contentAlignment = Alignment.Center
     ) {
-//        if (selectorProperties.enabled().value) {
-//            Surface(
-//                modifier = Modifier
-//                    .size(size.width, size.height / rowCount),
-//                shape = selectorProperties.shape().value,
-//                color = selectorProperties.color().value,
-//                border = selectorProperties.border().value
-//            ) {}
-//        }
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize()
+                .wheelPickerIndicator {
+                    drawOutline(
+                        outline = RoundedCornerShape(12.dp.toPx()).createOutline(Size(size.width, it), layoutDirection, this),
+                        color = Color.White.copy(alpha = 0.5F),
+                    )
+                },
             state = lazyListState,
             flingBehavior = flingBehavior
         ) {
@@ -189,64 +189,16 @@ private fun calculateAnimatedAlphaAndRotationX(
     return animatedAlpha to animatedRotationX
 }
 
+typealias CupertinoPickerIndicator = DrawScope.(itemHeight : Float) -> Unit
+
+private fun Modifier.wheelPickerIndicator(
+    indicator : CupertinoPickerIndicator
+) = drawWithContent {
+    drawContent()
+    translate(0f, (size.height - 32.dp.toPx()) / 2) {
+        indicator(32.dp.toPx())
+    }
+}
+
 @Composable
 private fun Dp.toPx() = with(LocalDensity.current) { this@toPx.toPx() }
-
-object WheelPickerDefaults {
-    @Composable
-    fun selectorProperties(
-        enabled: Boolean = true,
-        shape: Shape = RoundedCornerShape(12.dp),
-        color: Color = MaterialTheme.colors.primary.copy(alpha = 0.2f),
-        border: BorderStroke? = BorderStroke(1.dp, MaterialTheme.colors.primary),
-    ): SelectorProperties = DefaultSelectorProperties(
-        enabled = enabled,
-        shape = shape,
-        color = color,
-        border = border
-    )
-}
-
-@Stable
-interface SelectorProperties {
-    @Composable
-    fun enabled(): State<Boolean>
-
-    @Composable
-    fun shape(): State<Shape>
-
-    @Composable
-    fun color(): State<Color>
-
-    @Composable
-    fun border(): State<BorderStroke?>
-}
-
-@Immutable
-internal class DefaultSelectorProperties(
-    private val enabled: Boolean,
-    private val shape: Shape,
-    private val color: Color,
-    private val border: BorderStroke?
-) : SelectorProperties {
-
-    @Composable
-    override fun enabled(): State<Boolean> {
-        return rememberUpdatedState(enabled)
-    }
-
-    @Composable
-    override fun shape(): State<Shape> {
-        return rememberUpdatedState(shape)
-    }
-
-    @Composable
-    override fun color(): State<Color> {
-        return rememberUpdatedState(color)
-    }
-
-    @Composable
-    override fun border(): State<BorderStroke?> {
-        return rememberUpdatedState(border)
-    }
-}

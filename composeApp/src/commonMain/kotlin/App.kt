@@ -83,25 +83,25 @@ fun App() {
 //                Text(text = selectedText)
 //            }
 
-            var selectedTime by remember { mutableStateOf("") }
-
-            Column(
-                modifier = Modifier.weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                WheelTimePicker(
-                    modifier = Modifier.background(Color.LightGray).fillMaxWidth(0.7F),
-                    state = rememberTimePickerState(endless = false),
-//                    initialTime = LocalTime(15, 23, 33),
-                    minTime = LocalTime(14, 22, 33),
-//                    maxTime = LocalTime(16, 24, 38),
-                    onSelectedTime = { time ->
-                        selectedTime = time.toString()
-                        println(selectedTime)
-                    }
-                )
-                Text(text = selectedTime)
-            }
+//            var selectedTime by remember { mutableStateOf("") }
+//
+//            Column(
+//                modifier = Modifier.weight(1f),
+//                horizontalAlignment = Alignment.CenterHorizontally
+//            ) {
+//                WheelTimePicker(
+//                    modifier = Modifier.background(Color.LightGray).fillMaxWidth(0.7F),
+//                    state = rememberTimePickerState(endless = false),
+////                    initialTime = LocalTime(15, 23, 33),
+//                    minTime = LocalTime(14, 22, 33),
+////                    maxTime = LocalTime(16, 24, 38),
+//                    onSelectedTime = { time ->
+//                        selectedTime = time.toString()
+//                        println(selectedTime)
+//                    }
+//                )
+//                Text(text = selectedTime)
+//            }
 
             var selectedDate by remember { mutableStateOf("") }
 
@@ -111,7 +111,7 @@ fun App() {
             ) {
                 WheelDatePicker(
                     modifier = Modifier
-                        .background(Color.LightGray)
+//                        .background(Color.LightGray)
                         .fillMaxWidth(),
                     endless = false,
                     minDate = LocalDate(2021, 3, 9),
